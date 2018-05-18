@@ -1,0 +1,9 @@
+/*mul_test.txt*/
+
+--> Due the structure of the nvdla multiplier (res_a, res_b outputs), there's not a test for this unit.
+
+/*mac_test.txt*/
+
+--> Instead of testing the nvdla multiplier it tested the nvdla mac. If the nvdla mac is working correctly, it means that also the multiplier is working.
+
+
