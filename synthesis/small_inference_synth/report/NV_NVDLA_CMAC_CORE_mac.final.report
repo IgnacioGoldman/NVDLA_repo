@@ -1,0 +1,1584 @@
+Information: Updating design information... (UID-85)
+ 
+****************************************
+Report : qor
+Design : NV_NVDLA_CMAC_CORE_mac
+Version: L-2016.03-SP5-2
+Date   : Mon Jun 11 16:41:51 2018
+****************************************
+
+
+  Timing Path Group (none)
+  -----------------------------------
+  Levels of Logic:             0.0000
+  Critical Path Length:        0.1130
+  Critical Path Slack:         uninit
+  Critical Path Clk Period:       n/a
+  Total Negative Slack:        0.0000
+  No. of Violating Paths:      0.0000
+  Worst Hold Violation:        0.0000
+  Total Hold Violation:        0.0000
+  No. of Hold Violations:      0.0000
+  -----------------------------------
+
+
+  Cell Count
+  -----------------------------------
+  Hierarchical Cell Count:          0
+  Hierarchical Port Count:          0
+  Leaf Cell Count:               2694
+  Buf/Inv Cell Count:             324
+  Buf Cell Count:                   0
+  Inv Cell Count:                 324
+  CT Buf/Inv Cell Count:            0
+  Combinational Cell Count:      2674
+  Sequential Cell Count:           20
+  Macro Count:                      0
+  -----------------------------------
+
+
+  Area
+  -----------------------------------
+  Combinational Area:       4406.8249
+  Noncombinational Area:     119.9520
+  Buf/Inv Area:              228.6144
+  Total Buffer Area:           0.0000
+  Total Inverter Area:       228.6144
+  Macro/Black Box Area:        0.0000
+  Net Area:                    0.0000
+  -----------------------------------
+  Cell Area:                4526.7769
+  Design Area:              4526.7769
+
+
+  Design Rules
+  -----------------------------------
+  Total Number of Nets:          2932
+  Nets With Violations:             0
+  Max Trans Violations:             0
+  Max Cap Violations:               0
+  -----------------------------------
+
+
+  Hostname: philae
+
+  Compile CPU Statistics
+  -----------------------------------------
+  Resource Sharing:                  0.0000
+  Logic Optimization:                0.0000
+  Mapping Optimization:              0.0000
+  -----------------------------------------
+  Overall Compile Time:             20.0300
+  Overall Compile Wall Clock Time:   5.6872
+
+  --------------------------------------------------------------------
+
+  Design  WNS: 0.0000  TNS: 0.0000  Number of Violating Paths: 0
+
+
+  Design (Hold)  WNS: 0.0000  TNS: 0.0000  Number of Violating Paths: 0
+
+  --------------------------------------------------------------------
+
+
+1
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -nworst 5
+        -input_pins
+        -nets
+        -max_paths 50
+Design : NV_NVDLA_CMAC_CORE_mac
+Version: L-2016.03-SP5-2
+Date   : Mon Jun 11 16:41:51 2018
+****************************************
+
+Operating Conditions: nom_1.10V_25C   Library: CMOS045_SC_14_CORE_LS
+Wire Load Model Mode: top
+
+  Startpoint: mac_out_pvld_reg
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_pvld
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_pvld_reg/CP (HS45_LS_SDFPQX4)                 0.0000     0.0000 r
+  mac_out_pvld_reg/Q (HS45_LS_SDFPQX4)                  0.1130     0.1130 r
+  mac_out_pvld (net)                            2       0.0000     0.1130 r
+  mac_out_pvld (out)                                    0.0000     0.1130 r
+  data arrival time                                                0.1130
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_pvld_reg
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_pvld
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_pvld_reg/CP (HS45_LS_SDFPQX4)                 0.0000     0.0000 r
+  mac_out_pvld_reg/Q (HS45_LS_SDFPQX4)                  0.1053     0.1053 f
+  mac_out_pvld (net)                            2       0.0000     0.1053 f
+  mac_out_pvld (out)                                    0.0000     0.1053 f
+  data arrival time                                                0.1053
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[18]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[18]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[18]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[18]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[18] (net)                        1       0.0000     0.1039 r
+  mac_out_data[18] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[17]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[17]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[17]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[17]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[17] (net)                        1       0.0000     0.1039 r
+  mac_out_data[17] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[16]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[16]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[16]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[16]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[16] (net)                        1       0.0000     0.1039 r
+  mac_out_data[16] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[15]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[15]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[15]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[15]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[15] (net)                        1       0.0000     0.1039 r
+  mac_out_data[15] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[14]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[14]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[14]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[14]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[14] (net)                        1       0.0000     0.1039 r
+  mac_out_data[14] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[13]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[13]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[13]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[13]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[13] (net)                        1       0.0000     0.1039 r
+  mac_out_data[13] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[12]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[12]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[12]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[12]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[12] (net)                        1       0.0000     0.1039 r
+  mac_out_data[12] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[11]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[11]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[11]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[11]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[11] (net)                        1       0.0000     0.1039 r
+  mac_out_data[11] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[10]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[10]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[10]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[10]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[10] (net)                        1       0.0000     0.1039 r
+  mac_out_data[10] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[9]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[9]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[9]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[9]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[9] (net)                         1       0.0000     0.1039 r
+  mac_out_data[9] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[8]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[8]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[8]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[8]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[8] (net)                         1       0.0000     0.1039 r
+  mac_out_data[8] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[7]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[7]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[7]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[7]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[7] (net)                         1       0.0000     0.1039 r
+  mac_out_data[7] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[6]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[6]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[6]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[6]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[6] (net)                         1       0.0000     0.1039 r
+  mac_out_data[6] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[5]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[5]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[5]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[5]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[5] (net)                         1       0.0000     0.1039 r
+  mac_out_data[5] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[4]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[4]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[4]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[4]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[4] (net)                         1       0.0000     0.1039 r
+  mac_out_data[4] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[3]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[3]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[3]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[3]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[3] (net)                         1       0.0000     0.1039 r
+  mac_out_data[3] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[2]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[2]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[2]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[2]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[2] (net)                         1       0.0000     0.1039 r
+  mac_out_data[2] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[1]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[1]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[1]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[1]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[1] (net)                         1       0.0000     0.1039 r
+  mac_out_data[1] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[0]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[0]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[0]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[0]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[0] (net)                         1       0.0000     0.1039 r
+  mac_out_data[0] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[18]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[18]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[18]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[18]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[18] (net)                        1       0.0000     0.0943 f
+  mac_out_data[18] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[17]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[17]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[17]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[17]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[17] (net)                        1       0.0000     0.0943 f
+  mac_out_data[17] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[16]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[16]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[16]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[16]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[16] (net)                        1       0.0000     0.0943 f
+  mac_out_data[16] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[15]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[15]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[15]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[15]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[15] (net)                        1       0.0000     0.0943 f
+  mac_out_data[15] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[14]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[14]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[14]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[14]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[14] (net)                        1       0.0000     0.0943 f
+  mac_out_data[14] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[13]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[13]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[13]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[13]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[13] (net)                        1       0.0000     0.0943 f
+  mac_out_data[13] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[12]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[12]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[12]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[12]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[12] (net)                        1       0.0000     0.0943 f
+  mac_out_data[12] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[11]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[11]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[11]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[11]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[11] (net)                        1       0.0000     0.0943 f
+  mac_out_data[11] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[10]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[10]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[10]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[10]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[10] (net)                        1       0.0000     0.0943 f
+  mac_out_data[10] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[9]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[9]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[9]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[9]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[9] (net)                         1       0.0000     0.0943 f
+  mac_out_data[9] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[8]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[8]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[8]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[8]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[8] (net)                         1       0.0000     0.0943 f
+  mac_out_data[8] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[7]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[7]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[7]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[7]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[7] (net)                         1       0.0000     0.0943 f
+  mac_out_data[7] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[6]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[6]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[6]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[6]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[6] (net)                         1       0.0000     0.0943 f
+  mac_out_data[6] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[5]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[5]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[5]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[5]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[5] (net)                         1       0.0000     0.0943 f
+  mac_out_data[5] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[4]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[4]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[4]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[4]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[4] (net)                         1       0.0000     0.0943 f
+  mac_out_data[4] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[3]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[3]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[3]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[3]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[3] (net)                         1       0.0000     0.0943 f
+  mac_out_data[3] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[2]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[2]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[2]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[2]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[2] (net)                         1       0.0000     0.0943 f
+  mac_out_data[2] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[1]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[1]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[1]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[1]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[1] (net)                         1       0.0000     0.0943 f
+  mac_out_data[1] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[0]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[0]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[0]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[0]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[0] (net)                         1       0.0000     0.0943 f
+  mac_out_data[0] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+1
+ 
+****************************************
+Report : constraint
+        -all_violators
+Design : NV_NVDLA_CMAC_CORE_mac
+Version: L-2016.03-SP5-2
+Date   : Mon Jun 11 16:41:51 2018
+****************************************
+
+
+   max_area
+
+                             Required        Actual
+   Design                      Area           Area           Slack
+   -----------------------------------------------------------------
+   NV_NVDLA_CMAC_CORE_mac     0.0000       4526.7769      -4526.7769 (VIOLATED)
+
+
+   max_leakage_power
+
+                             Required        Actual
+   Design                   Leakage Power  Leakage Power     Slack
+   -----------------------------------------------------------------
+   NV_NVDLA_CMAC_CORE_mac     0.0000         0.0006        -0.0006  (VIOLATED)
+
+
+1
+ 
+****************************************
+Report : resources
+Design : NV_NVDLA_CMAC_CORE_mac
+Version: L-2016.03-SP5-2
+Date   : Mon Jun 11 16:41:51 2018
+****************************************
+
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1639/src/NV_NVDLA_CMAC_CORE_mac.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| DP_OP_16J1_122_8186             |            |                            |
+|                | DP_OP_16J1_122_8186 |       |                            |
+=============================================================================
+
+Datapath Report for DP_OP_16J1_122_8186
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_16J1_122_8186  | add_158 (NV_NVDLA_CMAC_CORE_mac.v:158)              |
+|                      | add_157 (NV_NVDLA_CMAC_CORE_mac.v:157)              |
+|                      | add_161 (NV_NVDLA_CMAC_CORE_mac.v:161)              |
+|                      | add_156 (NV_NVDLA_CMAC_CORE_mac.v:156)              |
+|                      | add_155 (NV_NVDLA_CMAC_CORE_mac.v:155)              |
+|                      | add_160 (NV_NVDLA_CMAC_CORE_mac.v:160)              |
+|                      | add_163 (NV_NVDLA_CMAC_CORE_mac.v:163)              |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Signed   | 16    |                                          |
+| I2    | PI   | Signed   | 16    |                                          |
+| I3    | PI   | Signed   | 16    |                                          |
+| I4    | PI   | Signed   | 16    |                                          |
+| I5    | PI   | Signed   | 16    |                                          |
+| I6    | PI   | Signed   | 16    |                                          |
+| I7    | PI   | Signed   | 16    |                                          |
+| I8    | PI   | Signed   | 16    |                                          |
+| O1    | PO   | Signed   | 19    | I1 + I2 + I3 + I4 + I5 + I6 + I7 + I8 ( NV_NVDLA_CMAC_CORE_mac.v:155 NV_NVDLA_CMAC_CORE_mac.v:156 NV_NVDLA_CMAC_CORE_mac.v:157 NV_NVDLA_CMAC_CORE_mac.v:158 NV_NVDLA_CMAC_CORE_mac.v:160 NV_NVDLA_CMAC_CORE_mac.v:161 NV_NVDLA_CMAC_CORE_mac.v:163 ) |
+==============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| DP_OP_16J1_122_8186                   |                    |                |
+|                    | DP_OP_16J1_122_8186 | str (area)      |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| DP_OP_16J1_122_8186        | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+1
+ 
+****************************************
+Report : clocks
+Design : NV_NVDLA_CMAC_CORE_mac
+Version: L-2016.03-SP5-2
+Date   : Mon Jun 11 16:41:51 2018
+****************************************
+
+No clocks in this design.
+
+1
+ 
+****************************************
+Report : clock_skew
+Design : NV_NVDLA_CMAC_CORE_mac
+Version: L-2016.03-SP5-2
+Date   : Mon Jun 11 16:41:51 2018
+****************************************
+
+                 Rise      Fall  Min Rise  Min fall        Uncertainty
+Object          Delay     Delay     Delay     Delay     Plus      Minus
+--------------------------------------------------------------------------------
+1
+Information: Propagating switching activity (low effort zero delay simulation). (PWR-6)
+Warning: There is no defined clock in the design. (PWR-80)
+Warning: Design has unannotated primary inputs. (PWR-414)
+Warning: Design has unannotated sequential cell outputs. (PWR-415)
+ 
+****************************************
+Report : power
+        -analysis_effort low
+Design : NV_NVDLA_CMAC_CORE_mac
+Version: L-2016.03-SP5-2
+Date   : Mon Jun 11 16:41:51 2018
+****************************************
+
+
+Library(s) Used:
+
+    CMOS045_SC_14_CORE_LS (File: /space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db)
+
+
+Operating Conditions: nom_1.10V_25C   Library: CMOS045_SC_14_CORE_LS
+Wire Load Model Mode: top
+
+Design        Wire Load Model            Library
+------------------------------------------------
+NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+
+Global Operating Voltage = 1.1  
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000pf
+    Time Units = 1ns
+    Dynamic Power Units = 1mW    (derived from V,C,T units)
+    Leakage Power Units = 1mW
+
+
+  Cell Internal Power  = 781.4996 uW   (34%)
+  Net Switching Power  =   1.4982 mW   (66%)
+                         ---------
+Total Dynamic Power    =   2.2797 mW  (100%)
+
+Cell Leakage Power     = 296.2180 nW
+
+Information: report_power power group summary does not include estimated clock tree power. (PWR-789)
+
+                 Internal         Switching           Leakage            Total
+Power Group      Power            Power               Power              Power   (   %    )  Attrs
+--------------------------------------------------------------------------------------------------
+io_pad             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
+clock_network      0.0000            0.0000            0.0000            0.0000  (   0.00%)
+register           0.0000            0.0000            0.0000            0.0000  (   0.00%)
+sequential     3.6418e-02        2.7266e-04        8.4472e-06        3.6700e-02  (   1.61%)
+combinational      0.7451            1.4980        2.8777e-04            2.2433  (  98.39%)
+--------------------------------------------------------------------------------------------------
+Total              0.7815 mW         1.4982 mW     2.9622e-04 mW         2.2800 mW
+1
+********************************************************************************
+                        Threshold Voltage Group Report                         
+
+Vth Group                All                Blackbox           Non-blackbox
+Name                    cells                cells                cells
+********************************************************************************
+undefined            2694 (100.00%)          0   (0.00%)       2694 (100.00%)   
+********************************************************************************
+
+Vth Group                All                Blackbox           Non-blackbox
+Name                  cell area            cell area            cell area
+********************************************************************************
+undefined         4526.78 (100.00%)       0.00   (0.00%)    4526.78 (100.00%)   
+********************************************************************************
+1
+ 
+****************************************
+Report : design
+Design : NV_NVDLA_CMAC_CORE_mac
+Version: L-2016.03-SP5-2
+Date   : Mon Jun 11 16:41:51 2018
+****************************************
+
+Design allows ideal nets on clock nets.
+
+Library(s) Used:
+
+    CMOS045_SC_14_CORE_LS (File: /space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db)
+
+Local Link Library:
+
+    {/space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db}
+
+Flip-Flop Types:
+
+    No flip-flop types specified.
+
+Latch Types:
+
+    No latch types specified.
+
+Operating Conditions:
+
+
+    Operating Condition Name : nom_1.10V_25C
+    Library : CMOS045_SC_14_CORE_LS
+    Process :   1.00
+    Temperature :  25.00
+    Voltage :   1.10
+    Interconnect Model : balanced_tree
+
+Wire Loading Model:
+
+    Selected automatically from the total cell area.
+
+Name           :   area_4Kto5K
+Location       :   CMOS045_SC_14_CORE_LS
+Resistance     :   5.82357
+Capacitance    :   0.8
+Area           :   0
+Slope          :   0.0009728
+Fanout   Length   Points Average Cap Std Deviation
+--------------------------------------------------------------
+     1     0.00
+     2     0.00
+     3     0.00
+     4     0.00
+     5     0.00
+     6     0.01
+     7     0.01
+     8     0.01
+     9     0.01
+    10     0.01
+    11     0.01
+    12     0.01
+    13     0.01
+    14     0.01
+    15     0.01
+
+
+
+Wire Loading Model Mode: top.
+
+Timing Ranges:
+
+    No timing ranges specified.
+
+Pin Input Delays:
+
+    None specified.
+
+Pin Output Delays:
+
+    None specified.
+
+Disabled Timing Arcs:
+
+    No arcs disabled.
+
+Required Licenses:
+
+    DesignWare
+
+Design Parameters:
+
+    None specified.
+1

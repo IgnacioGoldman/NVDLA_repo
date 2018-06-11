@@ -1,0 +1,60 @@
+
+Information: Checking generated_clocks...
+
+Information: Checking loops...
+
+Information: Checking no_input_delay...
+
+Information: Checking unconstrained_endpoints...
+
+Warning: The following end-points are not constrained for maximum delay.
+
+End point
+---------------
+mac_out_data[0]
+mac_out_data[1]
+mac_out_data[2]
+mac_out_data[3]
+mac_out_data[4]
+mac_out_data[5]
+mac_out_data[6]
+mac_out_data[7]
+mac_out_data[8]
+mac_out_data[9]
+mac_out_data[10]
+mac_out_data[11]
+mac_out_data[12]
+mac_out_data[13]
+mac_out_data[14]
+mac_out_data[15]
+mac_out_data[16]
+mac_out_data[17]
+mac_out_data[18]
+mac_out_data_reg[0]/D
+mac_out_data_reg[1]/D
+mac_out_data_reg[2]/D
+mac_out_data_reg[3]/D
+mac_out_data_reg[4]/D
+mac_out_data_reg[5]/D
+mac_out_data_reg[6]/D
+mac_out_data_reg[7]/D
+mac_out_data_reg[8]/D
+mac_out_data_reg[9]/D
+mac_out_data_reg[10]/D
+mac_out_data_reg[11]/D
+mac_out_data_reg[12]/D
+mac_out_data_reg[13]/D
+mac_out_data_reg[14]/D
+mac_out_data_reg[15]/D
+mac_out_data_reg[16]/D
+mac_out_data_reg[17]/D
+mac_out_data_reg[18]/D
+mac_out_pvld
+mac_out_pvld_reg/D
+
+Information: Checking pulse_clock_cell_type...
+
+Information: Checking no_driving_cell...
+
+Information: Checking partial_input_delay...
+1

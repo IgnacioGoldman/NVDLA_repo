@@ -1,0 +1,4132 @@
+Information: Updating design information... (UID-85)
+ 
+****************************************
+Report : qor
+Design : NV_NVDLA_CMAC_CORE_mac
+Version: L-2016.03-SP5-2
+Date   : Mon Jun 11 16:29:06 2018
+****************************************
+
+
+  Timing Path Group (none)
+  -----------------------------------
+  Levels of Logic:             0.0000
+  Critical Path Length:        0.1130
+  Critical Path Slack:         uninit
+  Critical Path Clk Period:       n/a
+  Total Negative Slack:        0.0000
+  No. of Violating Paths:      0.0000
+  Worst Hold Violation:        0.0000
+  Total Hold Violation:        0.0000
+  No. of Hold Violations:      0.0000
+  -----------------------------------
+
+
+  Cell Count
+  -----------------------------------
+  Hierarchical Cell Count:        168
+  Hierarchical Port Count:       1792
+  Leaf Cell Count:               1735
+  Buf/Inv Cell Count:              71
+  Buf Cell Count:                   0
+  Inv Cell Count:                  71
+  CT Buf/Inv Cell Count:            0
+  Combinational Cell Count:      1715
+  Sequential Cell Count:           20
+  Macro Count:                      0
+  -----------------------------------
+
+
+  Area
+  -----------------------------------
+  Combinational Area:       4112.5897
+  Noncombinational Area:     119.9520
+  Buf/Inv Area:               50.0976
+  Total Buffer Area:           0.0000
+  Total Inverter Area:        50.0976
+  Macro/Black Box Area:        0.0000
+  Net Area:                    0.0000
+  -----------------------------------
+  Cell Area:                4232.5417
+  Design Area:              4232.5417
+
+
+  Design Rules
+  -----------------------------------
+  Total Number of Nets:          2223
+  Nets With Violations:             0
+  Max Trans Violations:             0
+  Max Cap Violations:               0
+  -----------------------------------
+
+
+  Hostname: philae
+
+  Compile CPU Statistics
+  -----------------------------------------
+  Resource Sharing:                  0.4349
+  Logic Optimization:                0.5009
+  Mapping Optimization:              4.5553
+  -----------------------------------------
+  Overall Compile Time:             21.1278
+  Overall Compile Wall Clock Time:  18.6027
+
+  --------------------------------------------------------------------
+
+  Design  WNS: 0.0000  TNS: 0.0000  Number of Violating Paths: 0
+
+
+  Design (Hold)  WNS: 0.0000  TNS: 0.0000  Number of Violating Paths: 0
+
+  --------------------------------------------------------------------
+
+
+1
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -nworst 5
+        -input_pins
+        -nets
+        -max_paths 50
+Design : NV_NVDLA_CMAC_CORE_mac
+Version: L-2016.03-SP5-2
+Date   : Mon Jun 11 16:29:06 2018
+****************************************
+
+Operating Conditions: nom_1.10V_25C   Library: CMOS045_SC_14_CORE_LS
+Wire Load Model Mode: top
+
+  Startpoint: mac_out_pvld_reg
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_pvld
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_pvld_reg/CP (HS45_LS_SDFPQX4)                 0.0000     0.0000 r
+  mac_out_pvld_reg/Q (HS45_LS_SDFPQX4)                  0.1130     0.1130 r
+  mac_out_pvld (net)                            2       0.0000     0.1130 r
+  mac_out_pvld (out)                                    0.0000     0.1130 r
+  data arrival time                                                0.1130
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_pvld_reg
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_pvld
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_pvld_reg/CP (HS45_LS_SDFPQX4)                 0.0000     0.0000 r
+  mac_out_pvld_reg/Q (HS45_LS_SDFPQX4)                  0.1053     0.1053 f
+  mac_out_pvld (net)                            2       0.0000     0.1053 f
+  mac_out_pvld (out)                                    0.0000     0.1053 f
+  data arrival time                                                0.1053
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[18]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[18]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[18]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[18]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[18] (net)                        1       0.0000     0.1039 r
+  mac_out_data[18] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[17]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[17]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[17]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[17]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[17] (net)                        1       0.0000     0.1039 r
+  mac_out_data[17] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[16]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[16]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[16]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[16]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[16] (net)                        1       0.0000     0.1039 r
+  mac_out_data[16] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[15]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[15]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[15]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[15]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[15] (net)                        1       0.0000     0.1039 r
+  mac_out_data[15] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[14]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[14]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[14]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[14]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[14] (net)                        1       0.0000     0.1039 r
+  mac_out_data[14] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[13]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[13]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[13]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[13]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[13] (net)                        1       0.0000     0.1039 r
+  mac_out_data[13] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[12]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[12]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[12]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[12]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[12] (net)                        1       0.0000     0.1039 r
+  mac_out_data[12] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[11]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[11]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[11]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[11]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[11] (net)                        1       0.0000     0.1039 r
+  mac_out_data[11] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[10]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[10]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[10]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[10]/Q (HS45_LS_SDFPQX4)              0.1039     0.1039 r
+  mac_out_data[10] (net)                        1       0.0000     0.1039 r
+  mac_out_data[10] (out)                                0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[9]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[9]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[9]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[9]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[9] (net)                         1       0.0000     0.1039 r
+  mac_out_data[9] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[8]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[8]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[8]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[8]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[8] (net)                         1       0.0000     0.1039 r
+  mac_out_data[8] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[7]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[7]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[7]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[7]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[7] (net)                         1       0.0000     0.1039 r
+  mac_out_data[7] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[6]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[6]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[6]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[6]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[6] (net)                         1       0.0000     0.1039 r
+  mac_out_data[6] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[5]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[5]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[5]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[5]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[5] (net)                         1       0.0000     0.1039 r
+  mac_out_data[5] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[4]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[4]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[4]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[4]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[4] (net)                         1       0.0000     0.1039 r
+  mac_out_data[4] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[3]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[3]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[3]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[3]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[3] (net)                         1       0.0000     0.1039 r
+  mac_out_data[3] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[2]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[2]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[2]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[2]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[2] (net)                         1       0.0000     0.1039 r
+  mac_out_data[2] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[1]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[1]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[1]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[1]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[1] (net)                         1       0.0000     0.1039 r
+  mac_out_data[1] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[0]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[0]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[0]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[0]/Q (HS45_LS_SDFPQX4)               0.1039     0.1039 r
+  mac_out_data[0] (net)                         1       0.0000     0.1039 r
+  mac_out_data[0] (out)                                 0.0000     0.1039 r
+  data arrival time                                                0.1039
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[18]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[18]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[18]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[18]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[18] (net)                        1       0.0000     0.0943 f
+  mac_out_data[18] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[17]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[17]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[17]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[17]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[17] (net)                        1       0.0000     0.0943 f
+  mac_out_data[17] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[16]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[16]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[16]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[16]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[16] (net)                        1       0.0000     0.0943 f
+  mac_out_data[16] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[15]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[15]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[15]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[15]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[15] (net)                        1       0.0000     0.0943 f
+  mac_out_data[15] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[14]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[14]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[14]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[14]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[14] (net)                        1       0.0000     0.0943 f
+  mac_out_data[14] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[13]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[13]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[13]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[13]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[13] (net)                        1       0.0000     0.0943 f
+  mac_out_data[13] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[12]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[12]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[12]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[12]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[12] (net)                        1       0.0000     0.0943 f
+  mac_out_data[12] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[11]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[11]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[11]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[11]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[11] (net)                        1       0.0000     0.0943 f
+  mac_out_data[11] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[10]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[10]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[10]/CP (HS45_LS_SDFPQX4)             0.0000     0.0000 r
+  mac_out_data_reg[10]/Q (HS45_LS_SDFPQX4)              0.0943     0.0943 f
+  mac_out_data[10] (net)                        1       0.0000     0.0943 f
+  mac_out_data[10] (out)                                0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[9]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[9]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[9]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[9]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[9] (net)                         1       0.0000     0.0943 f
+  mac_out_data[9] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[8]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[8]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[8]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[8]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[8] (net)                         1       0.0000     0.0943 f
+  mac_out_data[8] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[7]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[7]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[7]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[7]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[7] (net)                         1       0.0000     0.0943 f
+  mac_out_data[7] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[6]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[6]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[6]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[6]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[6] (net)                         1       0.0000     0.0943 f
+  mac_out_data[6] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[5]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[5]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[5]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[5]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[5] (net)                         1       0.0000     0.0943 f
+  mac_out_data[5] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[4]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[4]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[4]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[4]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[4] (net)                         1       0.0000     0.0943 f
+  mac_out_data[4] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[3]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[3]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[3]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[3]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[3] (net)                         1       0.0000     0.0943 f
+  mac_out_data[3] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[2]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[2]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[2]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[2]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[2] (net)                         1       0.0000     0.0943 f
+  mac_out_data[2] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[1]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[1]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[1]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[1]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[1] (net)                         1       0.0000     0.0943 f
+  mac_out_data[1] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+  Startpoint: mac_out_data_reg[0]
+              (rising edge-triggered flip-flop)
+  Endpoint: mac_out_data[0]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  mac_out_data_reg[0]/CP (HS45_LS_SDFPQX4)              0.0000     0.0000 r
+  mac_out_data_reg[0]/Q (HS45_LS_SDFPQX4)               0.0943     0.0943 f
+  mac_out_data[0] (net)                         1       0.0000     0.0943 f
+  mac_out_data[0] (out)                                 0.0000     0.0943 f
+  data arrival time                                                0.0943
+  -----------------------------------------------------------------------------------------------
+  (Path is unconstrained)
+
+
+1
+ 
+****************************************
+Report : constraint
+        -all_violators
+Design : NV_NVDLA_CMAC_CORE_mac
+Version: L-2016.03-SP5-2
+Date   : Mon Jun 11 16:29:06 2018
+****************************************
+
+
+   max_area
+
+                             Required        Actual
+   Design                      Area           Area           Slack
+   -----------------------------------------------------------------
+   NV_NVDLA_CMAC_CORE_mac     0.0000       4232.5415      -4232.5415 (VIOLATED)
+
+
+   max_leakage_power
+
+                             Required        Actual
+   Design                   Leakage Power  Leakage Power     Slack
+   -----------------------------------------------------------------
+   NV_NVDLA_CMAC_CORE_mac     0.0000         0.0007        -0.0007  (VIOLATED)
+
+
+1
+ 
+****************************************
+Report : resources
+Design : NV_NVDLA_CMAC_CORE_mac
+Version: L-2016.03-SP5-2
+Date   : Mon Jun 11 16:29:06 2018
+****************************************
+
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/NV_NVDLA_CMAC_CORE_mac.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| DP_OP_16J1_122_8186             |            |                            |
+|                | DP_OP_16J1_122_8186 |       |                            |
+=============================================================================
+
+Datapath Report for DP_OP_16J1_122_8186
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_16J1_122_8186  | add_158 (NV_NVDLA_CMAC_CORE_mac.v:158)              |
+|                      | add_157 (NV_NVDLA_CMAC_CORE_mac.v:157)              |
+|                      | add_161 (NV_NVDLA_CMAC_CORE_mac.v:161)              |
+|                      | add_156 (NV_NVDLA_CMAC_CORE_mac.v:156)              |
+|                      | add_155 (NV_NVDLA_CMAC_CORE_mac.v:155)              |
+|                      | add_160 (NV_NVDLA_CMAC_CORE_mac.v:160)              |
+|                      | add_163 (NV_NVDLA_CMAC_CORE_mac.v:163)              |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Signed   | 16    |                                          |
+| I2    | PI   | Signed   | 16    |                                          |
+| I3    | PI   | Signed   | 16    |                                          |
+| I4    | PI   | Signed   | 16    |                                          |
+| I5    | PI   | Signed   | 16    |                                          |
+| I6    | PI   | Signed   | 16    |                                          |
+| I7    | PI   | Signed   | 16    |                                          |
+| I8    | PI   | Signed   | 16    |                                          |
+| O1    | PO   | Signed   | 19    | I1 + I2 + I3 + I4 + I5 + I6 + I7 + I8 ( NV_NVDLA_CMAC_CORE_mac.v:155 NV_NVDLA_CMAC_CORE_mac.v:156 NV_NVDLA_CMAC_CORE_mac.v:157 NV_NVDLA_CMAC_CORE_mac.v:158 NV_NVDLA_CMAC_CORE_mac.v:160 NV_NVDLA_CMAC_CORE_mac.v:161 NV_NVDLA_CMAC_CORE_mac.v:163 ) |
+==============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| DP_OP_16J1_122_8186                   |                    |                |
+|                    | DP_OP_16J1_122_8186 | str (area)      |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| DP_OP_16J1_122_8186        | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+ 
+****************************************
+Design : mult8_5
+****************************************
+
+Resource Report for this hierarchy in file nvdla_syn_20180611_1627/src/mult8.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_inc       | width=8    | add_23 (mult8.v:23)        |
+| add_x_3        | DW01_inc       | width=8    | add_24 (mult8.v:24)        |
+| add_x_5        | DW01_add       | width=13   | add_26 (mult8.v:26)        |
+| add_x_6        | DW01_add       | width=16   | add_26_2 (mult8.v:26)      |
+| add_x_7        | DW01_inc       | width=15   | add_27 (mult8.v:27)        |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_inc         | apparch (area)     |                |
+| add_x_3            | DW01_inc         | apparch (area)     |                |
+| add_x_5            | DW01_add         | apparch (area)     |                |
+| add_x_6            | DW01_add         | apparch (area)     |                |
+| add_x_7            | DW01_inc         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_3                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_5                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_6                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_7                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+ 
+****************************************
+Design : mult4x4_23
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_95
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_94
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_93
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_92
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_22
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_91
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_90
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_89
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_88
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_21
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_87
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_86
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_85
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_84
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_20
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_83
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_82
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_81
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_80
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult8_4
+****************************************
+
+Resource Report for this hierarchy in file nvdla_syn_20180611_1627/src/mult8.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_inc       | width=8    | add_23 (mult8.v:23)        |
+| add_x_3        | DW01_inc       | width=8    | add_24 (mult8.v:24)        |
+| add_x_5        | DW01_add       | width=13   | add_26 (mult8.v:26)        |
+| add_x_6        | DW01_add       | width=16   | add_26_2 (mult8.v:26)      |
+| add_x_7        | DW01_inc       | width=15   | add_27 (mult8.v:27)        |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_inc         | apparch (area)     |                |
+| add_x_3            | DW01_inc         | apparch (area)     |                |
+| add_x_5            | DW01_add         | apparch (area)     |                |
+| add_x_6            | DW01_add         | apparch (area)     |                |
+| add_x_7            | DW01_inc         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_3                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_5                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_6                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_7                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+ 
+****************************************
+Design : mult4x4_19
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_79
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_78
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_77
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_76
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_18
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_75
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_74
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_73
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_72
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_17
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_71
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_70
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_69
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_68
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_16
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_67
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_66
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_65
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_64
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult8_3
+****************************************
+
+Resource Report for this hierarchy in file nvdla_syn_20180611_1627/src/mult8.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_inc       | width=8    | add_23 (mult8.v:23)        |
+| add_x_3        | DW01_inc       | width=8    | add_24 (mult8.v:24)        |
+| add_x_5        | DW01_add       | width=13   | add_26 (mult8.v:26)        |
+| add_x_6        | DW01_add       | width=16   | add_26_2 (mult8.v:26)      |
+| add_x_7        | DW01_inc       | width=15   | add_27 (mult8.v:27)        |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_inc         | apparch (area)     |                |
+| add_x_3            | DW01_inc         | apparch (area)     |                |
+| add_x_5            | DW01_add         | apparch (area)     |                |
+| add_x_6            | DW01_add         | apparch (area)     |                |
+| add_x_7            | DW01_inc         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_3                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_5                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_6                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_7                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+ 
+****************************************
+Design : mult4x4_15
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_63
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_62
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_61
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_60
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_14
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_59
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_58
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_57
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_56
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_13
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_55
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_54
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_53
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_52
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_12
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_51
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_50
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_49
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_48
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult8_2
+****************************************
+
+Resource Report for this hierarchy in file nvdla_syn_20180611_1627/src/mult8.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_inc       | width=8    | add_23 (mult8.v:23)        |
+| add_x_3        | DW01_inc       | width=8    | add_24 (mult8.v:24)        |
+| add_x_5        | DW01_add       | width=13   | add_26 (mult8.v:26)        |
+| add_x_6        | DW01_add       | width=16   | add_26_2 (mult8.v:26)      |
+| add_x_7        | DW01_inc       | width=15   | add_27 (mult8.v:27)        |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_inc         | apparch (area)     |                |
+| add_x_3            | DW01_inc         | apparch (area)     |                |
+| add_x_5            | DW01_add         | apparch (area)     |                |
+| add_x_6            | DW01_add         | apparch (area)     |                |
+| add_x_7            | DW01_inc         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_3                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_5                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_6                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_7                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+ 
+****************************************
+Design : mult4x4_11
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_47
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_46
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_45
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_44
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_10
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_43
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_42
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_41
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_40
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_9
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_39
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_38
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_37
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_36
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_8
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_35
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_34
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_33
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_32
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult8_1
+****************************************
+
+Resource Report for this hierarchy in file nvdla_syn_20180611_1627/src/mult8.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_inc       | width=8    | add_23 (mult8.v:23)        |
+| add_x_3        | DW01_inc       | width=8    | add_24 (mult8.v:24)        |
+| add_x_5        | DW01_add       | width=13   | add_26 (mult8.v:26)        |
+| add_x_6        | DW01_add       | width=16   | add_26_2 (mult8.v:26)      |
+| add_x_7        | DW01_inc       | width=15   | add_27 (mult8.v:27)        |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_inc         | apparch (area)     |                |
+| add_x_3            | DW01_inc         | apparch (area)     |                |
+| add_x_5            | DW01_add         | apparch (area)     |                |
+| add_x_6            | DW01_add         | apparch (area)     |                |
+| add_x_7            | DW01_inc         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_3                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_5                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_6                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_7                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+ 
+****************************************
+Design : mult4x4_7
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_31
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_30
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_29
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_28
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_6
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_27
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_26
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_25
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_24
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_5
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_23
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_22
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_21
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_20
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_4
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_19
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_18
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_17
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_16
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult8_0
+****************************************
+
+Resource Report for this hierarchy in file nvdla_syn_20180611_1627/src/mult8.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_inc       | width=8    | add_23 (mult8.v:23)        |
+| add_x_3        | DW01_inc       | width=8    | add_24 (mult8.v:24)        |
+| add_x_5        | DW01_add       | width=13   | add_26 (mult8.v:26)        |
+| add_x_6        | DW01_add       | width=16   | add_26_2 (mult8.v:26)      |
+| add_x_7        | DW01_inc       | width=15   | add_27 (mult8.v:27)        |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_inc         | apparch (area)     |                |
+| add_x_3            | DW01_inc         | apparch (area)     |                |
+| add_x_5            | DW01_add         | apparch (area)     |                |
+| add_x_6            | DW01_add         | apparch (area)     |                |
+| add_x_7            | DW01_inc         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_3                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_5                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_6                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_7                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+ 
+****************************************
+Design : mult4x4_3
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_15
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_14
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_13
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_12
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_2
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_11
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_10
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_9
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_8
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_1
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_7
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_6
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_5
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_4
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_0
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_3
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_2
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_1
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_0
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult8_6
+****************************************
+
+Resource Report for this hierarchy in file nvdla_syn_20180611_1627/src/mult8.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_inc       | width=8    | add_23 (mult8.v:23)        |
+| add_x_3        | DW01_inc       | width=8    | add_24 (mult8.v:24)        |
+| add_x_5        | DW01_add       | width=13   | add_26 (mult8.v:26)        |
+| add_x_6        | DW01_add       | width=16   | add_26_2 (mult8.v:26)      |
+| add_x_7        | DW01_inc       | width=15   | add_27 (mult8.v:27)        |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_inc         | apparch (area)     |                |
+| add_x_3            | DW01_inc         | apparch (area)     |                |
+| add_x_5            | DW01_add         | apparch (area)     |                |
+| add_x_6            | DW01_add         | apparch (area)     |                |
+| add_x_7            | DW01_inc         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_3                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_5                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_6                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_7                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+ 
+****************************************
+Design : mult4x4_27
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_111
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_110
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_109
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_108
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_26
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_107
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_106
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_105
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_104
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_25
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_103
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_102
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_101
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_100
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_24
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_99
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_98
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_97
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_96
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult8_7
+****************************************
+
+Resource Report for this hierarchy in file nvdla_syn_20180611_1627/src/mult8.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_inc       | width=8    | add_23 (mult8.v:23)        |
+| add_x_3        | DW01_inc       | width=8    | add_24 (mult8.v:24)        |
+| add_x_5        | DW01_add       | width=13   | add_26 (mult8.v:26)        |
+| add_x_6        | DW01_add       | width=16   | add_26_2 (mult8.v:26)      |
+| add_x_7        | DW01_inc       | width=15   | add_27 (mult8.v:27)        |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_inc         | apparch (area)     |                |
+| add_x_3            | DW01_inc         | apparch (area)     |                |
+| add_x_5            | DW01_add         | apparch (area)     |                |
+| add_x_6            | DW01_add         | apparch (area)     |                |
+| add_x_7            | DW01_inc         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_3                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_5                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_6                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_7                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+ 
+****************************************
+Design : mult4x4_29
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_119
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_118
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_117
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_116
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_28
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_115
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_114
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_113
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_112
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_30
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_123
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_122
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_121
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_120
+****************************************
+
+No implementations to report
+ 
+****************************************
+Design : mult4x4_31
+****************************************
+
+Resource Report for this hierarchy in file
+        nvdla_syn_20180611_1627/src/mult4x4.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_add       | width=7    | add_12 (mult4x4.v:12)      |
+| add_x_2        | DW01_add       | width=8    | add_12_2 (mult4x4.v:12)    |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_add         | apparch (area)     |                |
+| add_x_2            | DW01_add         | apparch (area)     |                |
+===============================================================================
+
+
+Datapath Optimization Report
+==============================================================================
+|                            | Optimization |                                |
+| Cell                       | Mode         | Smartgen Options               |
+==============================================================================
+| add_x_1                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+| add_x_2                    | area         | 42cmprCells:off                |
+|                            |              | csadderCells:off               |
+==============================================================================
+
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_126
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_125
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_124
+****************************************
+
+No implementations to report
+
+No resource sharing information to report.
+ 
+****************************************
+Design : mult2x2_127
+****************************************
+
+No implementations to report
+1
+ 
+****************************************
+Report : clocks
+Design : NV_NVDLA_CMAC_CORE_mac
+Version: L-2016.03-SP5-2
+Date   : Mon Jun 11 16:29:06 2018
+****************************************
+
+No clocks in this design.
+
+1
+ 
+****************************************
+Report : clock_skew
+Design : NV_NVDLA_CMAC_CORE_mac
+Version: L-2016.03-SP5-2
+Date   : Mon Jun 11 16:29:06 2018
+****************************************
+
+                 Rise      Fall  Min Rise  Min fall        Uncertainty
+Object          Delay     Delay     Delay     Delay     Plus      Minus
+--------------------------------------------------------------------------------
+1
+ 
+****************************************
+Report : power
+        -analysis_effort low
+Design : NV_NVDLA_CMAC_CORE_mac
+Version: L-2016.03-SP5-2
+Date   : Mon Jun 11 16:29:07 2018
+****************************************
+
+
+Library(s) Used:
+
+    CMOS045_SC_14_CORE_LS (File: /space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db)
+
+
+Operating Conditions: nom_1.10V_25C   Library: CMOS045_SC_14_CORE_LS
+Wire Load Model Mode: top
+
+Design        Wire Load Model            Library
+------------------------------------------------
+NV_NVDLA_CMAC_CORE_mac area_4Kto5K       CMOS045_SC_14_CORE_LS
+
+
+Global Operating Voltage = 1.1  
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000pf
+    Time Units = 1ns
+    Dynamic Power Units = 1mW    (derived from V,C,T units)
+    Leakage Power Units = 1mW
+
+
+  Cell Internal Power  =   1.0190 mW   (46%)
+  Net Switching Power  =   1.1728 mW   (54%)
+                         ---------
+Total Dynamic Power    =   2.1918 mW  (100%)
+
+Cell Leakage Power     = 354.0168 nW
+
+Information: report_power power group summary does not include estimated clock tree power. (PWR-789)
+
+                 Internal         Switching           Leakage            Total
+Power Group      Power            Power               Power              Power   (   %    )  Attrs
+--------------------------------------------------------------------------------------------------
+io_pad             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
+clock_network      0.0000            0.0000            0.0000            0.0000  (   0.00%)
+register           0.0000            0.0000            0.0000            0.0000  (   0.00%)
+sequential     3.6232e-02        2.7249e-04        8.4326e-06        3.6513e-02  (   1.67%)
+combinational      0.9828            1.1725        3.4558e-04            2.1556  (  98.33%)
+--------------------------------------------------------------------------------------------------
+Total              1.0190 mW         1.1728 mW     3.5402e-04 mW         2.1921 mW
+1
+********************************************************************************
+                        Threshold Voltage Group Report                         
+
+Vth Group                All                Blackbox           Non-blackbox
+Name                    cells                cells                cells
+********************************************************************************
+undefined            1735 (100.00%)          0   (0.00%)       1735 (100.00%)   
+********************************************************************************
+
+Vth Group                All                Blackbox           Non-blackbox
+Name                  cell area            cell area            cell area
+********************************************************************************
+undefined         4232.54 (100.00%)       0.00   (0.00%)    4232.54 (100.00%)   
+********************************************************************************
+1
+ 
+****************************************
+Report : design
+Design : NV_NVDLA_CMAC_CORE_mac
+Version: L-2016.03-SP5-2
+Date   : Mon Jun 11 16:29:07 2018
+****************************************
+
+Design allows ideal nets on clock nets.
+
+Library(s) Used:
+
+    CMOS045_SC_14_CORE_LS (File: /space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db)
+
+Local Link Library:
+
+    {/space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db}
+
+Flip-Flop Types:
+
+    No flip-flop types specified.
+
+Latch Types:
+
+    No latch types specified.
+
+Operating Conditions:
+
+
+    Operating Condition Name : nom_1.10V_25C
+    Library : CMOS045_SC_14_CORE_LS
+    Process :   1.00
+    Temperature :  25.00
+    Voltage :   1.10
+    Interconnect Model : balanced_tree
+
+Wire Loading Model:
+
+    Selected automatically from the total cell area.
+
+Name           :   area_4Kto5K
+Location       :   CMOS045_SC_14_CORE_LS
+Resistance     :   5.82357
+Capacitance    :   0.8
+Area           :   0
+Slope          :   0.0009728
+Fanout   Length   Points Average Cap Std Deviation
+--------------------------------------------------------------
+     1     0.00
+     2     0.00
+     3     0.00
+     4     0.00
+     5     0.00
+     6     0.01
+     7     0.01
+     8     0.01
+     9     0.01
+    10     0.01
+    11     0.01
+    12     0.01
+    13     0.01
+    14     0.01
+    15     0.01
+
+
+
+Wire Loading Model Mode: top.
+
+Timing Ranges:
+
+    No timing ranges specified.
+
+Pin Input Delays:
+
+    None specified.
+
+Pin Output Delays:
+
+    None specified.
+
+Disabled Timing Arcs:
+
+    No arcs disabled.
+
+Required Licenses:
+
+    DesignWare
+
+Design Parameters:
+
+    None specified.
+1

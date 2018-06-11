@@ -1,0 +1,1958 @@
+# ===================================================================
+# File: syn/scripts/dc_run.tcl
+# NVDLA Open Source Project
+# Reference synthesis methodology script for Design Compiler
+#
+# Copyright (c) 2016 – 2017 NVIDIA Corporation. Licensed under the
+# NVDLA Open Hardware License; see the "LICENSE.txt" file that came
+# with this distribution for more information.
+# ===================================================================
+# =====================
+# Setup variables/procs
+# =====================
+set synMsgInfo "Info:"
+Info:
+set synMsgErr  "Error:"
+Error:
+set synMsgWarn "Warning:"
+Warning:
+# PROC: setVar => Utility proc to set flow variables 
+# Env vars get highest priority, followed by TCL vars, followed by default vars.
+proc setVar {var {default ""}} {
+    global $var
+    global synMsgInfo synMsgWarn
+    if {[info exists ::env($var)]} {
+        set $var $::env($var)
+        puts "$synMsgInfo Setting $var from env, value = [set $var]"
+    } elseif {[info exists $var]} {
+        set $var [set $var]
+        puts "$synMsgInfo Setting $var to [set $var]"
+    } else {
+        set $var $default
+        puts "${synMsgWarn} Setting $var to default value \"[set $var]\""
+        return
+    }
+}
+# PROC: profileSystem => Print general machine information. 
+proc profileSystem {} {
+    global env tcl_platform synMsgInfo
+
+    puts "${synMsgInfo} date = [clock format [clock seconds] -format {%c}]"
+    puts "${synMsgInfo} cwd = [pwd]"
+    set myHost [info hostname]
+    puts "${synMsgInfo} executing on $myHost"
+    exec lsb_release -idrc
+    exec lscpu
+}
+# PROC: writeReports => Common reporting proc. 
+proc writeReports {{prefix "default"}} {
+    global synMsgInfo
+    global REPORT_DIR MODULE
+    set syn_report_max_paths               50
+    set syn_report_nworst                  5
+    set syn_report_simple                  0
+    set path_graph_max_paths 10000
+    set syn_report_flags   "-input_pins -nets"
+    set timing_flags [concat -nosplit -nworst $syn_report_nworst -max_paths $syn_report_max_paths -significant_digits 4 -attribute]
+    if { [shell_is_in_topographical_mode] } {
+        set timing_flags [concat $timing_flags -nets -physical -trans -cap] 
+    }
+    if {[info exists syn_report_flags]} {
+        set timing_flags [concat $timing_flags $syn_report_flags]
+    }
+
+    set module_report ${REPORT_DIR}/${MODULE}.${prefix}.report
+    suppress_message [list "TIM-175"]
+    redirect -append $module_report { report_qor -significant_digits 4 }
+    unsuppress_message [list "TIM-175"]
+    redirect -append $module_report { eval { report_timing } $timing_flags }
+    redirect -append $module_report { report_constraint -all -sig 4 -nosplit }
+    if { [shell_is_in_topographical_mode] } {
+            redirect -append $module_report { report_congestion }
+    }
+    redirect -append $module_report { report_resources -hierarchy }
+    redirect -append $module_report { report_clock -nosplit }
+    redirect -append $module_report { report_clock -skew -nosplit }
+    redirect -append $module_report { eval report_power -nosplit }
+    redirect -append $module_report { report_threshold_voltage_group }
+    #redirect -append $module_report { nvSynGeneral::reportLibAttributes }
+    redirect -append $module_report { report_design }
+
+}
+# =================
+# ===== BEGIN =====
+# =================
+# Print some information on host OS and resources
+profileSystem
+Info: date = Mon Jun 11 14:37:06 2018
+Info: cwd = /home/goldman/hw/simulation1/hw
+Info: executing on philae.polito.it
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                32
+On-line CPU(s) list:   0-31
+Thread(s) per core:    2
+Core(s) per socket:    8
+Socket(s):             2
+NUMA node(s):          2
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 63
+Model name:            Intel(R) Xeon(R) CPU E5-2630 v3 @ 2.40GHz
+Stepping:              2
+CPU MHz:               2400.000
+BogoMIPS:              4793.92
+Virtualization:        VT-x
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              20480K
+NUMA node0 CPU(s):     0-7,16-23
+NUMA node1 CPU(s):     8-15,24-31
+# Print env snapshot into the log
+foreach key [array names env] {
+    global synMsgInfo
+        puts "${synMsgInfo} (ENV) $key = $env($key)"
+}
+Info: (ENV) BUILD_NAME = nvdla_syn_20180611_1436
+Info: (ENV) LS_COLORS = rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=01;05;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.tbz=01;31:*.tbz2=01;31:*.bz=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=01;36:*.au=01;36:*.flac=01;36:*.mid=01;36:*.midi=01;36:*.mka=01;36:*.mp3=01;36:*.mpc=01;36:*.ogg=01;36:*.ra=01;36:*.wav=01;36:*.axa=01;36:*.oga=01;36:*.spx=01;36:*.xspf=01;36:
+Info: (ENV) HOME = /home/goldman
+Info: (ENV) CDSDIR = /space/tools/cadence/IC617
+Info: (ENV) RTL_EXTENSIONS = .v .sv .gv
+Info: (ENV) SELINUX_USE_CURRENT_RANGE = 
+Info: (ENV) LOGNAME = goldman
+Info: (ENV) RTL_INCLUDE_EXTENSIONS = .vh .svh
+Info: (ENV) QTLIB = /usr/lib64/qt-3.3/lib
+Info: (ENV) MGLS_LICENSE_FILE = 1717@localhost
+Info: (ENV) LC_ADDRESS = it_IT.UTF-8
+Info: (ENV) SSH_CLIENT = 130.192.232.26 51592 22
+Info: (ENV) DEF_DIR = nvdla_syn_20180611_1436/def
+Info: (ENV) HOST = philae
+Info: (ENV) CDS_ASSURA = /space/tools/cadence/ASSURA41
+Info: (ENV) LOG_DIR = nvdla_syn_20180611_1436/log
+Info: (ENV) NVDLA_ROOT = /home/goldman/hw/simulation1/hw
+Info: (ENV) SHELL = /bin/tcsh
+Info: (ENV) SNPSLMD_LICENSE_FILE = 27020@localhost
+Info: (ENV) REMOTEHOST = 130.192.232.26
+Info: (ENV) SELINUX_ROLE_REQUESTED = 
+Info: (ENV) MACHTYPE = x86_64
+Info: (ENV) OSTYPE = linux
+Info: (ENV) QTDIR = /usr/lib64/qt-3.3
+Info: (ENV) LC_TIME = it_IT.UTF-8
+Info: (ENV) SNPSLMD_QUEUE = true
+Info: (ENV) TLM = /space/tools/systemc/TLM-2009-07-15
+Info: (ENV) DW_ROOT = /space/tools/synopsys/syn-L-2016.03-SP5-2/dw
+Info: (ENV) USER = goldman
+Info: (ENV) LC_IDENTIFICATION = it_IT.UTF-8
+Info: (ENV) DLIB_DIR = nvdla_syn_20180611_1436/design_lib
+Info: (ENV) MANPATH = /usr/share/man:/space/tools/cadence/INNOVUS161/share/fe/man
+Info: (ENV) CDS_INNOVUS = /space/tools/cadence/INNOVUS161
+Info: (ENV) LC_MEASUREMENT = it_IT.UTF-8
+Info: (ENV) DB_DIR = nvdla_syn_20180611_1436/db
+Info: (ENV) CDS_MMSIM = /space/tools/cadence/MMSIM151
+Info: (ENV) RETHOME = /space/tools/cadence/MVS161
+Info: (ENV) TARGET_LIB = /space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db
+Info: (ENV) SCRIPTS_DIR = nvdla_syn_20180611_1436/scripts
+Info: (ENV) QA_MODE = 
+Info: (ENV) SYNOPSYS_SYN_PATH_PROFILER = 1
+Info: (ENV) MIN_ROUTING_LAYER = M2A
+Info: (ENV) RELEASE_DIR = /home/libs/t194_syn/11399272_08212017
+Info: (ENV) CDS_LIC_FILE = 5280@localhost
+Info: (ENV) SYSTEMC = /space/tools/systemc/systemc-2.3.1
+Info: (ENV) TMPDIR = /tmp
+Info: (ENV) SHLVL = 2
+Info: (ENV) HORIZONTAL_LAYERS = M2A M4A M6D M8E M10E M12E VM1 RDL
+Info: (ENV) LC_TELEPHONE = it_IT.UTF-8
+Info: (ENV) CDS_PVS = /space/tools/cadence/PVS151
+Info: (ENV) CONS = cons
+Info: (ENV) MODULEPATH = /usr/share/Modules/modulefiles:/etc/modulefiles
+Info: (ENV) DC_PATH = /space/tools/synopsys/syn-L-2016.03-SP5-2/bin
+Info: (ENV) RAM_LIB_DIR = .
+Info: (ENV) DONT_USE_LIST = 
+Info: (ENV) ALTOSHOME = /space/tools/cadence/LIBERATE151
+Info: (ENV) SSH_CONNECTION = 130.192.232.26 51592 130.192.16.63 22
+Info: (ENV) PATH = /space/tools/mathworks/R2017b/bin:/space/tools/mentor/questasim-10.6/questasim/bin:/space/tools/mentor/aoi_cal_2016.4_38.25_mib/aoi_nxdat_2016.4_38.25/bin:/space/tools/mentor/aoi_cal_2016.4_38.25_mib/aoi_cal_2016.4_38.25/bin:/space/tools/mentor/ams-16.1_patch1/bin:/space/tools/cadence/EXT141/bin:/space/tools/cadence/IC617/tools/dfII/bin:/space/tools/cadence/IC617/tools/bin:/space/tools/cadence/EXT152/bin:/space/tools/cadence/CTOS141/tools.lnx86/bin:/space/tools/synopsys/xa-L-2016.06-SP4/bin:/space/tools/synopsys/verdi-K-2015.09-SP1/bin:/space/tools/synopsys/txs-K-2015.06-SP4/bin:/space/tools/synopsys/synmc-M-2017.03/bin:/space/tools/synopsys/syn-L-2016.03-SP5-2/bin:/space/tools/synopsys/starrc-M-2016.12/amd64_starrc/bin:/space/tools/synopsys/s-smart-N-2017.12-1/bin:/space/tools/synopsys/pts-L-2016.06-SP3-1/bin:/space/tools/synopsys/nt-M-2016.12/bin:/space/tools/synopsys/mw-L-2016.03-SP5-1/bin/AMD.64:/space/tools/synopsys/lc-M-2016.12/bin:/space/tools/synopsys/icc-L-2016.03-SP5-1/bin:/space/tools/synopsys/hspice-L-2016.03-2/hspice/bin:/space/tools/synopsys/hsim-L-2016.06-SP4/hsimplus/bin:/space/tools/synopsys/fm-K-2015.06-SP4/bin:/space/tools/synopsys/cx-K-2015.06-SP2/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/bin:/usr/bin:/space/tools/cadence/INCISIVE152/bin:/space/tools/cadence/INCISIVE152/tools/bin:/space/tools/cadence/INCISIVE152/tools/systemc/gcc/bin:/space/tools/cadence/INCISIVE152/kits/VerificationKit/bin:/space/tools/cadence/INNOVUS161/bin:/space/tools/cadence/GENUS161/bin:/space/tools/cadence/LIBERATE151/bin:/space/tools/cadence/MMSIM151/bin:/space/tools/cadence/MODUS161/bin:/space/tools/cadence/MVS161/tools/bin:/space/tools/cadence/PVS151/bin:/space/tools/cadence/SSV161/bin:/space/tools/cadence/ASSURA41/tools/bin:/space/tools/cadence/ASSURA41/tools/assura/bin:/space/tools/cadence/ASSURA41/bin
+Info: (ENV) RTL_DEPS = nvdla_syn_20180611_1436/scripts/NV_NVDLA_CMAC_CORE_mac.files.vc
+Info: (ENV) CDS_Netlisting_Mode = Analog
+Info: (ENV) SSH_TTY = /dev/pts/14
+Info: (ENV) LC_ALL = C
+Info: (ENV) ASSURAHOME = /space/tools/cadence/ASSURA41
+Info: (ENV) LD_LIBRARY_PATH = .:/space/tools/systemc/systemc-ams-2.0_alpha1/lib-linux64:/space/tools/systemc/systemc-2.3.1/lib-linux64:/space/tools/synopsys/syn-L-2016.03-SP5-2/lib/AMD.64
+Info: (ENV) TIGHTEN_CGE = 1
+Info: (ENV) LESSOPEN = ||/usr/bin/lesspipe.sh %s
+Info: (ENV) VERTICAL_LAYERS = M1 M3A M5A M7E M9E M11E VM2 UBM
+Info: (ENV) SOCV_KIT_HOME = /space/tools/cadence/INCISIVE152/kits/VerificationKit
+Info: (ENV) MODULESHOME = /usr/share/Modules
+Info: (ENV) LOADEDMODULES = tools/synopsys/cx/K-2015.06-SP2:tools/synopsys/fm/K-2015.06-SP4:tools/synopsys/hsim/L-2016.06-SP4:tools/synopsys/hspice/L-2016.03-2:tools/synopsys/icc/L-2016.03-SP5-1:tools/synopsys/lc/M-2016.12:tools/synopsys/mw/L-2016.03-SP5-1:tools/synopsys/nt/M-2016.12:tools/synopsys/pts/L-2016.06-SP3-1:tools/synopsys/s-smart/N-2017.12-1:tools/synopsys/starrc/M-2016.12:tools/synopsys/syn/L-2016.03-SP5-2:tools/synopsys/synmc/M-2017.03:tools/synopsys/txs/K-2015.06-SP4:tools/synopsys/verdi/K-2015.09-SP1:tools/synopsys/xa/L-2016.06-SP4:tools/synopsys/license:tools/synopsys/all:tools/cadence/ctos/14.1:tools/cadence/ext/15.2:tools/cadence/ic/6.1.7:tools/cadence/incisive/15.2:tools/cadence/innovus/16.1:tools/cadence/genus/16.1:tools/cadence/liberate/15.1:tools/cadence/mmsim/15.1:tools/cadence/modus/16.1:tools/cadence/mvs/16.1:tools/cadence/pvs/15.1:tools/cadence/ssv/16.1:tools/cadence/assura/4.1:tools/cadence/license:tools/cadence/all:tools/mentor/ams/16.1_patch1:tools/mentor/calibre/2016.4_38.25:tools/mentor/questasim/10.6:tools/mentor/license:tools/mentor/all:tools/mathworks/R2017b:tools/systemc/2.3.1:tools/edatools
+Info: (ENV) CDS_GENUS = /space/tools/cadence/GENUS161
+Info: (ENV) SSH_ASKPASS = /usr/libexec/openssh/gnome-ssh-askpass
+Info: (ENV) PWD = /home/goldman/hw/simulation1/hw
+Info: (ENV) RTL_SEARCH_PATH =      /home/goldman/hw/simulation1/hw/vmod/nvdla/apb2csb
+/home/goldman/hw/simulation1/hw/vmod/nvdla/bdma
+/home/goldman/hw/simulation1/hw/vmod/nvdla/cacc
+/home/goldman/hw/simulation1/hw/vmod/nvdla/car
+/home/goldman/hw/simulation1/hw/vmod/nvdla/cbuf
+/home/goldman/hw/simulation1/hw/vmod/nvdla/cdma
+/home/goldman/hw/simulation1/hw/vmod/nvdla/cdp
+/home/goldman/hw/simulation1/hw/vmod/nvdla/cmac
+/home/goldman/hw/simulation1/hw/vmod/nvdla/csb_master
+/home/goldman/hw/simulation1/hw/vmod/nvdla/csc
+/home/goldman/hw/simulation1/hw/vmod/nvdla/glb
+/home/goldman/hw/simulation1/hw/vmod/nvdla/nocif
+/home/goldman/hw/simulation1/hw/vmod/nvdla/pdp
+/home/goldman/hw/simulation1/hw/vmod/nvdla/retiming
+/home/goldman/hw/simulation1/hw/vmod/nvdla/rubik
+/home/goldman/hw/simulation1/hw/vmod/nvdla/sdp
+/home/goldman/hw/simulation1/hw/vmod/nvdla/top     /home/goldman/hw/simulation1/hw/vmod/rams/*     /home/goldman/hw/simulation1/hw/vmod/vlibs 
+Info: (ENV) LMC_HOME = 
+Info: (ENV) COMMAND_PREFIX = 
+Info: (ENV) DISPLAY = localhost:13.0
+Info: (ENV) VENDOR = unknown
+Info: (ENV) TMUX = /tmp/tmux-553/default,31305,0
+Info: (ENV) CGLUT_FILE = /home/goldman/hw/simulation1/hw/templates/cg_latency_lut.tcl
+Info: (ENV) CDS_MVS = /space/tools/cadence/MVS161
+Info: (ENV) TLUPLUS_FILE = /home/libs/t194_syn/11399272_08212017/tech.A01/star/plusv1d0p2/cln16ff+_1p14m_4xa1xd6xe2z_mim_ut-alrdl_typical.tluplus
+Info: (ENV) SELINUX_LEVEL_REQUESTED = 
+Info: (ENV) DFMHOME = /space/tools/cadence/MVS161
+Info: (ENV) DC_NUM_CORES = 8
+Info: (ENV) TF_FILE = /home/libs/t194_syn/11399272_08212017/tech.A01/astro/v1d0_1e/N16_ICC_14M_4Xa1Xd6Xe2Z_UTRDL_1.0_1e.tf_vhv.20160404.production.pnr
+Info: (ENV) CONS_DIR = nvdla_syn_20180611_1436/cons
+Info: (ENV) SEARCH_PATH = . nvdla_syn_20180611_1436/src
+Info: (ENV) CLK_GATING_CELL = 
+Info: (ENV) CDSHOME = /space/tools/cadence/IC617
+Info: (ENV) SUBSTRATESTORMHOME = /space/tools/cadence/ASSURA41
+Info: (ENV) TLUPLUS_MAPPING_FILE = /home/libs/t194_syn/11399272_08212017/tech.A01/star/mapping/cln16ff_14m_1x4xa1xd6xe2vm_tluplus.mapping
+Info: (ENV) ALTOS_64 = 1
+Info: (ENV) EXTRA_RTL =      /home/goldman/hw/simulation1/hw/vmod/nvdla/nocif/NV_NVDLA_XXIF_libs.v 
+Info: (ENV) LC_MONETARY = it_IT.UTF-8
+Info: (ENV) ARCH = linux64
+Info: (ENV) SYN_MODE = wlm
+Info: (ENV) LC_PAPER = it_IT.UTF-8
+Info: (ENV) LC_NAME = it_IT.UTF-8
+Info: (ENV) ASSURA_AUTO_64BIT = ALL
+Info: (ENV) HOSTNAME = philae
+Info: (ENV) INCREMENTAL_RECOMPILE_COUNT = 2
+Info: (ENV) CDS_EXT = /space/tools/cadence/EXT141
+Info: (ENV) LM_LICENSE_FILE = 27020@localhost
+Info: (ENV) _LMFILES_000 = /etc/modulefiles/tools/synopsys/cx/K-2015.06-SP2:/etc/modulefiles/tools/synopsys/fm/K-2015.06-SP4:/etc/modulefiles/tools/synopsys/hsim/L-2016.06-SP4:/etc/modulefiles/tools/synopsys/hspice/L-2016.03-2:/etc/modulefiles/tools/synopsys/icc/L-2016.03-SP5-1:/etc/modulefiles/tools/synopsys/lc/M-2016.12:/etc/modulefiles/tools/synopsys/mw/L-2016.03-SP5-1:/etc/modulefiles/tools/synopsys/nt/M-2016.12:/etc/modulefiles/tools/synopsys/pts/L-2016.06-SP3-1:/etc/modulefiles/tools/synopsys/s-smart/N-2017.12-1:/etc/modulefiles/tools/synopsys/starrc/M-2016.12:/etc/modulefiles/tools/synopsys/syn/L-2016.03-SP5-2:/etc/modulefiles/tools/synopsys/synmc/M-2017.03:/etc/modulefiles/tools/synopsys/txs/K-2015.06-SP4:/etc/modulefiles/tools/synopsys/verdi/K-2015.09-SP1:/etc/modulefiles/tools/synopsys/xa/L-2016.06-SP4:/etc/modulefiles/tools/synopsys/license:/etc/modulefiles/tools/synopsys/all:/etc/modulefiles/tools/cadence/ctos/14.1:/etc/modulefiles/tools/cadence/ext/15.2:/etc/modulefiles/tools/cadence/ic/6.1.7:/etc/m
+Info: (ENV) MW_LIB =     /home/libs/t194_syn/11399272_08212017/std_cell/nvstd/apollo.A01/nvstd_stdcell_tsmc16ff_t9_po4svt_std     /home/libs/t194_syn/11399272_08212017/std_cell/nvstd/apollo.A01/nvstd_stdcell_tsmc16ff_t9_hvt_std     /home/libs/t194_syn/11399272_08212017/std_cell/nvstd/apollo.A01/nvstd_stdcell_tsmc16ff_t9_svt_std     /home/libs/t194_syn/11399272_08212017/std_cell/nvidia/apollo.A01/nvidia_stdcell_tsmc16ff_t9_sup_std     /home/libs/t194_syn/11399272_08212017/std_cell/nvidia/apollo.A01/nvidia_stdcell_tsmc16ff_t9_po4svt_std     /home/libs/t194_syn/11399272_08212017/std_cell/nvidia/apollo.A01/nvidia_stdcell_tsmc16ff_t9_svt_std     /home/libs/t194_syn/11399272_08212017/rams/nvgen/apollo.A01/nvgen_rams_tsmc16ff_cust_mixvt_std 
+Info: (ENV) MAIL = /var/spool/mail/goldman
+Info: (ENV) _LMFILES_001 = odulefiles/tools/cadence/incisive/15.2:/etc/modulefiles/tools/cadence/innovus/16.1:/etc/modulefiles/tools/cadence/genus/16.1:/etc/modulefiles/tools/cadence/liberate/15.1:/etc/modulefiles/tools/cadence/mmsim/15.1:/etc/modulefiles/tools/cadence/modus/16.1:/etc/modulefiles/tools/cadence/mvs/16.1:/etc/modulefiles/tools/cadence/pvs/15.1:/etc/modulefiles/tools/cadence/ssv/16.1:/etc/modulefiles/tools/cadence/assura/4.1:/etc/modulefiles/tools/cadence/license:/etc/modulefiles/tools/cadence/all:/etc/modulefiles/tools/mentor/ams/16.1_patch1:/etc/modulefiles/tools/mentor/calibre/2016.4_38.25:/etc/modulefiles/tools/mentor/questasim/10.6:/etc/modulefiles/tools/mentor/license:/etc/modulefiles/tools/mentor/all:/etc/modulefiles/tools/mathworks/R2017b:/etc/modulefiles/tools/systemc/2.3.1:/etc/modulefiles/tools/edatools
+Info: (ENV) LINK_LIB = /space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db
+Info: (ENV) CDS_SSV = /space/tools/cadence/SSV161
+Info: (ENV) GROUP = goldman
+Info: (ENV) SYNOPSYS_TRACE = 
+Info: (ENV) WIRELOAD_MODEL_FILE = 
+Info: (ENV) QRC_HOME = /space/tools/cadence/EXT141
+Info: (ENV) CPLUS_INCLUDE_PATH = /space/tools/systemc/TLM-2009-07-15/include:/space/tools/systemc/systemc-ams-2.0_alpha1/include:/space/tools/systemc/systemc-2.3.1/include
+Info: (ENV) TOP_NAMES = NV_NVDLA_CMAC_CORE_mac
+Info: (ENV) DONT_UNGROUP_LIST = 
+Info: (ENV) MGC_AMS_HOME = /space/tools/mentor/ams-16.1_patch1
+Info: (ENV) DEF = def
+Info: (ENV) AREA_RECOVERY = 1
+Info: (ENV) SYNOPSYS = /space/tools/synopsys/syn-L-2016.03-SP5-2
+Info: (ENV) CVS_RSH = ssh
+Info: (ENV) SYSTEMC_AMS = /space/tools/systemc/systemc-ams-2.0_alpha1
+Info: (ENV) HOSTTYPE = x86_64-linux
+Info: (ENV) TERM = screen
+Info: (ENV) TMUX_PANE = %0
+Info: (ENV) MAX_ROUTING_LAYER = M12E
+Info: (ENV) CDS_INCV = /space/tools/cadence/INCISIVE152
+Info: (ENV) CDS_MODUS = /space/tools/cadence/MODUS161
+Info: (ENV) G_BROKEN_FILENAMES = 1
+Info: (ENV) MW_DIR = nvdla_syn_20180611_1436/mw
+Info: (ENV) REPORT_DIR = nvdla_syn_20180611_1436/report
+Info: (ENV) FV_DIR = nvdla_syn_20180611_1436/fv
+Info: (ENV) PS_HWPC = OFF
+Info: (ENV) CTOS_ROOT = /space/tools/cadence/CTOS141
+Info: (ENV) CDS_USE_PALETTE = 
+Info: (ENV) CDS_IC = /space/tools/cadence/IC617
+Info: (ENV) NET_DIR = nvdla_syn_20180611_1436/net
+Info: (ENV) MODULE = NV_NVDLA_CMAC_CORE_mac
+Info: (ENV) RTL_INCLUDE_SEARCH_PATH =      /home/goldman/hw/simulation1/hw/vmod/include 
+Info: (ENV) WIRELOAD_MODEL_NAME = tsmc16ff_from_smq
+Info: (ENV) QTINC = /usr/lib64/qt-3.3/include
+# SYN_MODE: "wlm" (wireload model - DEFAULT) , "dcg" (physical, using -spg) or "de" (physical, using Design Explorer)
+setVar SYN_MODE wlm
+Info: Setting SYN_MODE from env, value = wlm
+# Name of top-level design
+setVar MODULE
+Info: Setting MODULE from env, value = NV_NVDLA_CMAC_CORE_mac
+# Directories
+setVar CONS_DIR cons
+Info: Setting CONS_DIR from env, value = nvdla_syn_20180611_1436/cons
+setVar DB_DIR db
+Info: Setting DB_DIR from env, value = nvdla_syn_20180611_1436/db
+setVar LOG_DIR log
+Info: Setting LOG_DIR from env, value = nvdla_syn_20180611_1436/log
+setVar REPORT_DIR report
+Info: Setting REPORT_DIR from env, value = nvdla_syn_20180611_1436/report
+setVar NET_DIR net
+Info: Setting NET_DIR from env, value = nvdla_syn_20180611_1436/net
+setVar FV_DIR fv
+Info: Setting FV_DIR from env, value = nvdla_syn_20180611_1436/fv
+setVar MW_DIR mw
+Info: Setting MW_DIR from env, value = nvdla_syn_20180611_1436/mw
+setVar DLIB_DIR design_lib
+Info: Setting DLIB_DIR from env, value = nvdla_syn_20180611_1436/design_lib
+setVar DEF_DIR def
+Info: Setting DEF_DIR from env, value = nvdla_syn_20180611_1436/def
+setVar SCRIPTS_DIR scripts
+Info: Setting SCRIPTS_DIR from env, value = nvdla_syn_20180611_1436/scripts
+setVar SEARCH_PATH "."
+Info: Setting SEARCH_PATH from env, value = . nvdla_syn_20180611_1436/src
+setVar RTL_EXTENSIONS ".v .sv .gv"
+Info: Setting RTL_EXTENSIONS from env, value = .v .sv .gv
+# Dont proceed if you cant find the scripts directory for app vars and other settings. 
+if {![file exists $SCRIPTS_DIR]} {
+   puts "${synMsgErr} Unable to proceed, please specify SCRITPS_DIR. "
+   exit 1
+}
+# Extensions
+setVar DB_EXT ddc
+Warning: Setting DB_EXT to default value "ddc"
+setVar NET_EXT gv
+Warning: Setting NET_EXT to default value "gv"
+setVar SDC_VER "1.7"
+Warning: Setting SDC_VER to default value "1.7"
+# Library settings
+setVar TARGET_LIB ""
+Info: Setting TARGET_LIB from env, value = /space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db
+setVar LINK_LIB ""
+Info: Setting LINK_LIB from env, value = /space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db
+setVar MW_LIB ""
+Info: Setting MW_LIB from env, value =     /home/libs/t194_syn/11399272_08212017/std_cell/nvstd/apollo.A01/nvstd_stdcell_tsmc16ff_t9_po4svt_std     /home/libs/t194_syn/11399272_08212017/std_cell/nvstd/apollo.A01/nvstd_stdcell_tsmc16ff_t9_hvt_std     /home/libs/t194_syn/11399272_08212017/std_cell/nvstd/apollo.A01/nvstd_stdcell_tsmc16ff_t9_svt_std     /home/libs/t194_syn/11399272_08212017/std_cell/nvidia/apollo.A01/nvidia_stdcell_tsmc16ff_t9_sup_std     /home/libs/t194_syn/11399272_08212017/std_cell/nvidia/apollo.A01/nvidia_stdcell_tsmc16ff_t9_po4svt_std     /home/libs/t194_syn/11399272_08212017/std_cell/nvidia/apollo.A01/nvidia_stdcell_tsmc16ff_t9_svt_std     /home/libs/t194_syn/11399272_08212017/rams/nvgen/apollo.A01/nvgen_rams_tsmc16ff_cust_mixvt_std 
+setVar TF_FILE
+Info: Setting TF_FILE from env, value = /home/libs/t194_syn/11399272_08212017/tech.A01/astro/v1d0_1e/N16_ICC_14M_4Xa1Xd6Xe2Z_UTRDL_1.0_1e.tf_vhv.20160404.production.pnr
+setVar TLUPLUS_FILE
+Info: Setting TLUPLUS_FILE from env, value = /home/libs/t194_syn/11399272_08212017/tech.A01/star/plusv1d0p2/cln16ff+_1p14m_4xa1xd6xe2z_mim_ut-alrdl_typical.tluplus
+setVar TLUPLUS_MAPPING_FILE
+Info: Setting TLUPLUS_MAPPING_FILE from env, value = /home/libs/t194_syn/11399272_08212017/tech.A01/star/mapping/cln16ff_14m_1x4xa1xd6xe2vm_tluplus.mapping
+setVar DONT_USE_LIST ""
+Info: Setting DONT_USE_LIST from env, value = 
+setVar MIN_ROUTING_LAYER ""
+Info: Setting MIN_ROUTING_LAYER from env, value = M2A
+setVar MAX_ROUTING_LAYER ""
+Info: Setting MAX_ROUTING_LAYER from env, value = M12E
+setVar CLOCK_GATING_CELL ""
+Warning: Setting CLOCK_GATING_CELL to default value ""
+setVar DONT_UNGROUP_LIST ""
+Info: Setting DONT_UNGROUP_LIST from env, value = 
+setVar HORIZONTAL_LAYERS ""
+Info: Setting HORIZONTAL_LAYERS from env, value = M2A M4A M6D M8E M10E M12E VM1 RDL
+setVar VERTICAL_LAYERS ""
+Info: Setting VERTICAL_LAYERS from env, value = M1 M3A M5A M7E M9E M11E VM2 UBM
+setVar QA_MODE ""
+Info: Setting QA_MODE from env, value = 
+if {[shell_is_in_exploration_mode]} {
+    set de_log_html_filename ${LOG_DIR}/${MODULE}_de.html
+}
+set_app_var link_path ${LINK_LIB}
+/space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db
+set_app_var target_library ${TARGET_LIB}
+/space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db
+set library_name [file rootname [file tail [lindex ${TARGET_LIB} 0]]]
+CMOS045_SC_14_CORE_LS_nom_1.10V_25C
+# SVF, to guide Formality
+set_svf ${FV_DIR}/${MODULE}/${MODULE}.svf
+1
+puts "${synMsgInfo} Setting SVF to  ${FV_DIR}/${MODULE}/${MODULE}.svf"
+Info: Setting SVF to  nvdla_syn_20180611_1436/fv/NV_NVDLA_CMAC_CORE_mac/NV_NVDLA_CMAC_CORE_mac.svf
+# Misc Synthesis recipe variables
+setVar DC_NUM_CORES 1; # Assume calling scripts sets this up correctly
+Info: Setting DC_NUM_CORES from env, value = 8
+setVar TIGHTEN_CGE 1; # Choose whether or not to overconstrain CG enable paths. 
+Info: Setting TIGHTEN_CGE from env, value = 1
+set suppress_errors "VER-130 UID-95"
+VER-130 UID-95
+set_host_options -max_cores ${DC_NUM_CORES}
+1
+# Set up some application vars
+if {[file exists "${SCRIPTS_DIR}/dc_app_vars.tcl"]} {
+    puts "${synMsgInfo} Sourcing ${SCRIPTS_DIR}/dc_app_vars.tcl"
+    source -echo -verbose ${SCRIPTS_DIR}/dc_app_vars.tcl
+}
+Info: Sourcing nvdla_syn_20180611_1436/scripts/dc_app_vars.tcl
+# ===================================================================
+# File: syn/scripts/dc_app_vars.tcl
+# NVDLA Open Source Project
+# Reference application variables for Design Compiler to get the 
+# best QoR with Design Compiler. 
+#
+# Copyright (c) 2016 – 2017 NVIDIA Corporation. Licensed under the
+# NVDLA Open Hardware License; see the "LICENSE.txt" file that came
+# with this distribution for more information.
+# ===================================================================
+# HDL Compiler settings
+set hdl_preferred_license                       verilog
+verilog
+set hdlin_preserve_sequential                   true
+true
+set hdlin_check_no_latch                                true
+true
+set hdlin_enable_rtldrc_info                    false
+false
+set hdlin_infer_hdlc_compliant_set_reset        true
+Information: Use of Variable 'hdlin_infer_hdlc_compliant_set_reset' is not recommended. This variable will be obsolete in a future release. (INFO-101)
+true
+set hdlin_remove_set_reset_from_activation      true
+true
+set hdlin_infer_complex_enable                  true
+Information: Use of Variable 'hdlin_infer_complex_enable' is not recommended. This variable will be obsolete in a future release. (INFO-101)
+true
+set hdlin_no_group_register                     true
+Information: Use of Variable 'hdlin_no_group_register' is not recommended. This variable will be obsolete in a future release. (INFO-101)
+true
+set hdlin_vhdl93_concat                         TRUE
+TRUE
+# Allow PG pins connected in RTL.
+set dc_allow_rtl_pg                 true
+true
+set mv_allow_upf_cells_without_upf  true
+true
+set_app_var mv_upf_tracking false
+Information: UPF tracking variable will be marked read-only in the current Design Compiler session. (UPF-402)
+false
+# Allow reset timing analysis
+set enable_recovery_removal_arcs          true
+true
+# Variables affecting wall time of compilations vs quality
+set compile_limit_down_sizing                        false  
+false
+set compile_use_fast_sequential_mode                 false
+false
+set timing_enable_multiple_clocks_per_reg true
+true
+set timing_disable_data_checks false
+false
+set_app_var sh_continue_on_error false
+false
+set timing_separate_clock_gating_group true
+true
+set ignore_tf_error      true
+true
+# Design naming styles
+# set template_naming_style                        "%s_%p_${module}"
+set template_parameter_style                     %d
+%d
+set template_separator_style                     _
+_
+set port_complement_naming_style                 %s_
+%s_
+# Verilog output 
+set verilogout_higher_designs_first              false
+false
+set verilogout_no_tri                            true
+true
+set verilogout_equation                          false
+false
+set verilogout_single_bit                        false
+false
+set write_name_nets_same_as_ports                true
+true
+set bind_unused_hierarchical_pins            false
+false
+# this defaulted to true in 2003.12, but don't want it on by default
+# enable with caution -- it could have fec implications.
+set fsm_auto_inferring                    false
+false
+set compile_log_format                       "%elap_time %area %wns(.4) %tns(.4) %drc %endpoint"
+%elap_time %area %wns(.4) %tns(.4) %drc %endpoint
+# so DC doesn't change the type of clock gating cell that we specify
+set power_do_not_size_icg_cells                  true
+true
+# Required for compile_ultra -gate_clock to match -global flag in
+# insert_clock_gating
+set compile_clock_gating_through_hierarchy       true
+true
+# Configure advanced datapath options
+set_dp_smartgen_options -4to2_compressor_cell false -carry_select_adder_cell false
+1
+set optimize_reg_no_generic_logic_for_comp_incr  false
+false
+# don't put set_load commands in the SDC we write out
+set write_sdc_output_lumped_net_capacitance false
+false
+set lib_cell_using_delay_from_ccs            false
+false
+set power_cg_print_enable_conditions             true
+true
+set power_cg_print_enable_conditions_max_terms   25
+25
+set high_fanout_net_threshold                   0
+0
+set compile_disable_hierarchical_inverter_opt   true
+true
+set compile_seqmap_enable_output_inversion      false
+false
+set optimize_reg_rewire_clock_gating false
+false
+set compile_retime_exception_registers true 
+true
+## limit synthesis to try and keep hieracrchy names.
+if {![shell_is_in_exploration_mode]} {
+        set compile_seqmap_propagate_high_effort true
+        set compile_seqmap_propagate_constants true
+        #set_verification_priority [current_design] -high
+        set compile_timing_high_effort true
+        set compile_ultra_ungroup_dw true
+        set compile_ultra_ungroup_small_hierarchies true
+}
+true
+set dont_bind_unused_pins_to_logic_constant  false
+false
+set compile_seqmap_propagate_constants_size_only  true
+true
+if {[shell_is_in_topographical_mode] && ![shell_is_in_exploration_mode]} {
+        set physopt_enable_via_res_support "true"; # Enables support of via resistance for virtual route RC estimation.
+        set dct_prioritize_area_correlation "true"; # prioritize area correlation between DC-T and ICC.
+        
+        set_self_gating_options               -max_fanout 100                 -min_fanout 25
+}
+if {![shell_is_in_topographical_mode]} {
+
+    # Variables affecting wall time of compilations vs quality
+    set compile_use_fast_delay_mode              true
+    set hdlin_enable_vpp                         true
+    
+}
+Information: Variable 'compile_use_fast_delay_mode' is obsolete and is being ignored. (INFO-100)
+Information: Variable 'hdlin_enable_vpp' is obsolete and is being ignored. (INFO-100)
+true
+# Enable physical flow in DCE
+if {[shell_is_in_exploration_mode]} {
+        set_app_var  de_enable_physical_flow true
+}
+# Make DC-G use the track definitions and not fill in the gaps with more routing resource!
+#set_route_zrt_common_options -track_auto_fill false
+# force all reporting into work directory  (issue NV_GR_GPMSD_pri_target)
+define_design_lib WORK -path     ${DLIB_DIR}/${MODULE}/work
+1
+set alib_library_analysis_path   ${DLIB_DIR}/${MODULE}
+nvdla_syn_20180611_1436/design_lib/NV_NVDLA_CMAC_CORE_mac
+# Read logical/timing libs
+puts "${synMsgInfo} Read library and create alib"
+Info: Read library and create alib
+read_file -format db $target_library
+Loading db file '/space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db'
+Loading db file '/space/tools/synopsys/syn-L-2016.03-SP5-2/libraries/syn/gtech.db'
+Loading db file '/space/tools/synopsys/syn-L-2016.03-SP5-2/libraries/syn/standard.sldb'
+  Loading link library 'CMOS045_SC_14_CORE_LS'
+  Loading link library 'gtech'
+Loading db file '/space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db'
+Warning: Overwriting design file '/space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db'. (DDB-24)
+Loaded 0 designs.
+# Search path
+set_app_var search_path "${SEARCH_PATH}"
+. nvdla_syn_20180611_1436/src
+######################
+## Section : synthesis
+#####################
+setVar RTL_DEPS ""
+Info: Setting RTL_DEPS from env, value = nvdla_syn_20180611_1436/scripts/NV_NVDLA_CMAC_CORE_mac.files.vc
+set vcsOpt "{-f $RTL_DEPS}"
+{-f nvdla_syn_20180611_1436/scripts/NV_NVDLA_CMAC_CORE_mac.files.vc}
+catch {eval {analyze -format sverilog -work WORK} -vcs $vcsOpt} analyzeStatus
+Running PRESTO HDLC
+Compiling source file nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:189: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:190: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:191: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:192: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:193: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:194: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:195: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:196: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:197: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:198: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:199: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:200: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:201: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:202: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:203: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:204: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:205: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:206: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:207: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:208: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:209: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:210: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:211: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:212: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:213: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:214: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:215: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:216: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:217: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:218: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:219: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:220: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:221: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:222: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:223: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:224: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:225: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:226: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:227: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:228: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:229: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:230: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:231: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:232: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:233: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:234: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:235: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:236: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:237: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:238: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:239: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:240: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:241: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:242: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:243: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:244: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:245: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:246: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:247: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:248: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:249: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:250: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:251: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:252: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:332: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:333: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:334: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:335: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:336: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:337: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:338: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:339: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:340: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:341: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:342: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:343: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:344: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:345: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:346: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:347: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:348: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:349: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:350: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:351: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:352: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:353: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:354: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:355: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:356: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:357: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:358: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:359: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:360: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:361: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:362: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:363: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:364: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:365: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:366: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:367: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:368: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:369: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:370: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:371: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:372: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:373: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:374: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:375: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:376: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:377: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:378: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:379: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:380: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:381: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:382: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:383: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:384: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:385: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:386: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:387: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:388: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:389: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:390: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:391: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:392: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:393: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:394: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Warning:  nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v:395: The construct 'declaration initial assignment' is not supported in synthesis; it is ignored. (VER-708)
+Compiling source file nvdla_syn_20180611_1436/src/mult16.v
+Compiling source file nvdla_syn_20180611_1436/src/NV_NVDLA_XXIF_libs.v
+Opening include file nvdla_syn_20180611_1436/src/simulate_x_tick.vh
+Opening include file nvdla_syn_20180611_1436/src/simulate_x_tick.vh
+Opening include file nvdla_syn_20180611_1436/src/simulate_x_tick.vh
+Opening include file nvdla_syn_20180611_1436/src/simulate_x_tick.vh
+Compiling source file nvdla_syn_20180611_1436/src/mult8x8.v
+Compiling source file nvdla_syn_20180611_1436/src/NV_NVDLA_XXIF_libs.v
+Opening include file nvdla_syn_20180611_1436/src/simulate_x_tick.vh
+Opening include file nvdla_syn_20180611_1436/src/simulate_x_tick.vh
+Opening include file nvdla_syn_20180611_1436/src/simulate_x_tick.vh
+Opening include file nvdla_syn_20180611_1436/src/simulate_x_tick.vh
+Compiling source file nvdla_syn_20180611_1436/src/mult4x4.v
+Compiling source file nvdla_syn_20180611_1436/src/NV_NVDLA_XXIF_libs.v
+Opening include file nvdla_syn_20180611_1436/src/simulate_x_tick.vh
+Opening include file nvdla_syn_20180611_1436/src/simulate_x_tick.vh
+Opening include file nvdla_syn_20180611_1436/src/simulate_x_tick.vh
+Opening include file nvdla_syn_20180611_1436/src/simulate_x_tick.vh
+Compiling source file nvdla_syn_20180611_1436/src/mult2x2.v
+Presto compilation completed successfully.
+0
+if { $analyzeStatus != 1 } {
+    puts "${synMsgErr} Analyze failed!  Aborting..."
+    exit 1
+}
+# Elaborate and switch design to current block.
+elaborate ${MODULE}
+Running PRESTO HDLC
+
+Inferred memory devices in process
+        in routine NV_NVDLA_CMAC_CORE_mac line 746 in file
+                'nvdla_syn_20180611_1436/src/NV_NVDLA_CMAC_CORE_mac.v'.
+====================================================================================
+|      Register Name       |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+====================================================================================
+| sign_ext_mult_res_00_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_01_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_02_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_03_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_04_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_05_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_06_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_07_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_08_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_09_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_10_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_11_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_12_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_13_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_14_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_15_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_16_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_17_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_18_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_19_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_20_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_21_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_22_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_23_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_24_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_25_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_26_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_27_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_28_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_29_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_30_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_31_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_32_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_33_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_34_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_35_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_36_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_37_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_38_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_39_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_40_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_41_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_42_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_43_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_44_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_45_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_46_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_47_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_48_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_49_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_50_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_51_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_52_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_53_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_54_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_55_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_56_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_57_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_58_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_59_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_60_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_61_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_62_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+| sign_ext_mult_res_63_reg | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp0_reg         | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp1_reg         | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp2_reg         | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp3_reg         | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp4_reg         | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp5_reg         | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp6_reg         | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp7_reg         | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp8_reg         | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp9_reg         | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp10_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp11_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp12_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp13_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp14_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp15_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp16_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp17_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp18_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp19_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp20_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp21_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp22_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp23_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp24_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp25_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp26_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp27_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp28_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp29_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp30_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|        temp31_reg        | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempsec0_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempsec1_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempsec2_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempsec3_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempsec4_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempsec5_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempsec6_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempsec7_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempsec8_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempsec9_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|      tempsec10_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|      tempsec11_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|      tempsec12_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|      tempsec13_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|      tempsec14_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|      tempsec15_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempter0_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempter1_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempter2_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempter3_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempter4_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempter5_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempter6_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempter7_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempcua0_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempcua1_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempcua2_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempcua3_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempqui0_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|       tempqui1_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|      tempsect0_reg       | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|     mac_out_nan_reg      | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|          a1_reg          | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|    mac_out_data_w_reg    | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|   mac_out_data_w2_reg    | Flip-flop |  44   |  Y  | N  | N  | N  | N  | N  | N  |
+|     mac_out_data_reg     | Flip-flop |  176  |  Y  | N  | N  | N  | N  | N  | N  |
+|     mac_out_pvld_reg     | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+====================================================================================
+Presto compilation completed successfully.
+Elaborated 1 design.
+Current design is now 'NV_NVDLA_CMAC_CORE_mac'.
+Information: Building the design 'mult16'. (HDL-193)
+Presto compilation completed successfully.
+Information: Building the design 'mult8x8'. (HDL-193)
+Presto compilation completed successfully.
+Information: Building the design 'mult4x4'. (HDL-193)
+Presto compilation completed successfully.
+Information: Building the design 'mult2x2'. (HDL-193)
+Presto compilation completed successfully.
+1
+current_design ${MODULE}
+Current design is 'NV_NVDLA_CMAC_CORE_mac'.
+{NV_NVDLA_CMAC_CORE_mac}
+# Libraries for physical synthesis
+# remove mw first
+if {[shell_is_in_exploration_mode]} {
+    if {[ file exists ${MW_DIR}/${MODULE}_de.mw]} {
+        exec rm -rf ${MW_DIR}/${MODULE}_de.mw
+    }
+} else {
+        if {[ file exists ${MW_DIR}/${MODULE}_dcg.mw]} {
+        exec rm -rf ${MW_DIR}/${MODULE}_dcg.mw
+        }
+}
+if {[shell_is_in_topographical_mode]} {
+ set mw_logic1_net "VDD"
+ set mw_logic0_net "VSS"
+}
+set mw_reference_library [list]
+if {[shell_is_in_topographical_mode]} {
+    set mw_reference_library ${MW_LIB}
+        set_app_var mw_reference_library $mw_reference_library
+    
+    # Create milkyway design database for block
+    extend_mw_layers
+        if {[shell_is_in_exploration_mode]} {
+        create_mw_lib -technology ${TF_FILE} -mw_reference_library $mw_reference_library -open ${MW_DIR}/${MODULE}_de.mw
+        } else {
+                create_mw_lib -technology ${TF_FILE} -mw_reference_library $mw_reference_library -open ${MW_DIR}/${MODULE}_dcg.mw
+        }
+    # read technology files
+    set_tlu_plus_files -max_tluplus ${TLUPLUS_FILE} -min_tluplus ${TLUPLUS_FILE} -tech2itf_map ${TLUPLUS_MAPPING_FILE}
+    redirect -file ${REPORT_DIR}/itf_check.rpt { check_tlu_plus_files }
+        redirect -file ${REPORT_DIR}/lib_report.rpt { report_lib $library_name }
+
+    if { ${HORIZONTAL_LAYERS} != "" } {
+        set_preferred_routing_direction -layers "$HORIZONTAL_LAYERS" -direction horizontal 
+    }
+    if { ${VERTICAL_LAYERS} != "" } {
+        set_preferred_routing_direction -layers "$VERTICAL_LAYERS" -direction vertical 
+    }
+    
+}
+if ![ link ] {
+    puts "${synMsgErr} Failed to link. Aborting..."
+    exit 1
+}
+
+  Linking design 'NV_NVDLA_CMAC_CORE_mac'
+  Using the following designs and libraries:
+  --------------------------------------------------------------------------
+  CMOS045_SC_14_CORE_LS (library) /space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db
+
+if {$QA_MODE == "link_only"} {
+    puts "${synMsgInfo} Design linked successfully. Exiting gracefully."
+    exit 0
+}
+puts "${synMsgInfo} Analyze alibs"
+Info: Analyze alibs
+alib_analyze_libs
+Analyzing: "/space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db"
+Library analysis succeeded.
+1
+# Write out a DDC at this point. 
+write -f ddc -hier -o ${DB_DIR}/${MODULE}.elaborated.ddc
+Writing ddc file 'nvdla_syn_20180611_1436/db/NV_NVDLA_CMAC_CORE_mac.elaborated.ddc'.
+1
+# Set wireload model
+setVar WIRELOAD_MODEL_NAME ""
+Info: Setting WIRELOAD_MODEL_NAME from env, value = tsmc16ff_from_smq
+setVar WIRELOAD_MODEL_FILE ""
+Info: Setting WIRELOAD_MODEL_FILE from env, value = 
+if {![shell_is_in_topographical_mode] && ![shell_is_in_exploration_mode]} {
+    if { $WIRELOAD_MODEL_FILE != "" } {
+        update_lib $library_name $WIRELOAD_MODEL_FILE -no_warnings
+        puts "${synMsgInfo} Reading in wireload model file $WIRELOAD_MODEL_FILE ..."
+    }
+    if { $WIRELOAD_MODEL_NAME != ""} {
+        set_wire_load_model  -name $WIRELOAD_MODEL_NAME
+        set_wire_load_mode   top
+        puts "${synMsgInfo} Setting wireload model to $WIRELOAD_MODEL_NAME"
+    }
+}
+Error: Wire load 'tsmc16ff_from_smq' not found. (UID-40)
+Info: Setting wireload model to tsmc16ff_from_smq
+# Set dont use on user cells
+if {[info exists DONT_USE_LIST] && (${DONT_USE_LIST} != "")} {
+    set list_du [list]
+        foreach tempCelltLib ${DONT_USE_LIST} {
+        set detectLibCells [get_lib_cells -regexp -quiet ".*/${tempCelltLib}"]
+        if { [sizeof_collection $detectLibCells] > 0 } {
+                        foreach_in_collection cell $detectLibCells {
+                lappend list_du [get_object_name $cell]
+                    puts "${synMsgInfo} Putting dont_use attributes on [get_object_name $cell]"
+            }
+        }
+    }
+        set_dont_use $list_du
+}
+# Connect const port to inv to avoid having shorted ports
+set_fix_multiple_port_nets -all -buffer_constants [get_designs *] 
+1
+# Read in a floorplan/macro placement TCL , and set up min/max routing layers if specified
+if {[shell_is_in_topographical_mode]} {
+    if {[file exists "${DEF_DIR}/${MODULE}.def"]} {
+                puts "${synMsgInfo} Reading input floorplan file ${DEF_DIR}/${MODULE}.def"
+                extract_physical_constraints -verbose "${DEF_DIR}/${MODULE}.def"
+        report_physical_constraints
+        } else {
+                puts "${synMsgWarn} No DEF file found. Continuing without defnining a floorplan."
+        }
+    
+    # source the macro placement file if it exists
+        if {[info exists CONS_DIR] && [file exists "${CONS_DIR}/${MODULE}.macroplacement.tcl"]} {
+                source -echo -verbose ${CONS_DIR}/${MODULE}.macroplacement.tcl
+        } else {
+                puts "${synMsgWarn} No macro placement file found. Continuing without defnining a floorplan."
+        }
+        
+    if {[info exists MAX_ROUTING_LAYER] && ${MAX_ROUTING_LAYER} != "" && [info exists MIN_ROUTING_LAYER] && ${MIN_ROUTING_LAYER} != "" } {
+                puts "${synMsgInfo} Min/max routing layers specified - ${MIN_ROUTING_LAYER}/${MAX_ROUTING_LAYER}"
+                set_ignored_layers -min_routing_layer ${MIN_ROUTING_LAYER} -max_routing_layer ${MAX_ROUTING_LAYER}
+        }       
+}
+# Clock gating command
+set power_cg_auto_identify  true
+true
+#if {[info exiists CLOCK_GATING_CELL] && ${CLOCK_GATING_CELL} != ""} {
+#    set_clock_gating_style -sequential_cell latch -positive_edge_logic integrated:${CLOCK_GATING_CELL} -max_fanout 1000000000 -minimum_bitwidth 4 -control_point before -control_signal scan_enable
+#}
+# Latest constraints file SDC/cons
+# source SDC file
+if  {[info exists CONS_DIR] && [file exists "${CONS_DIR}/${MODULE}.sdc"]} {
+    puts "${synMsgInfo} Reading input SDC ${CONS_DIR}/${MODULE}.sdc using \"read_sdc\""
+        read_sdc "${CONS_DIR}/${MODULE}.sdc"
+}
+if  {[info exists CONS_DIR] && [file exists "${CONS_DIR}/${MODULE}.tcl"]} {
+    puts "${synMsgInfo} Reading additional (non-SDC) constraints from ${CONS_DIR}/${MODULE}.tcl using \"source\""
+        source -echo -verbose "${CONS_DIR}/${MODULE}.tcl"
+} 
+# Tighten synthesis constraints for enable signals to clock gates
+setVar CGLUT_FILE ""
+Info: Setting CGLUT_FILE from env, value = /home/goldman/hw/simulation1/hw/templates/cg_latency_lut.tcl
+if {![shell_is_in_exploration_mode]} {
+    if { ${TIGHTEN_CGE} == 1 && [file exists $CGLUT_FILE]  } {
+        puts "${synMsgInfo} Start tighten_cg_enable_constraints"
+        # Reset all the clock gate latency apply in sdc
+        reset_clock_gate_latency
+        source $CGLUT_FILE
+        set i 1
+        set size [llength [array names timingDeltaTableForCgEnable]]
+        set end_1st [expr $size/2]
+        set start_2nd [expr $end_1st + 1]
+        foreach tableIndex [lsort -integer [array names timingDeltaTableForCgEnable]] {
+            if { $i=="1" } {
+                        set lat [expr 1.0 * $timingDeltaTableForCgEnable($tableIndex) / 1000.0]
+                        set start 1
+                } elseif { $i < "$end_1st"} {
+                        set end [expr $tableIndex -1]
+                        set fanoutTable($i) "${start}-${end} -${lat}"
+                        set start $tableIndex
+                        set lat [expr 1.0 * $timingDeltaTableForCgEnable($tableIndex) / 1000.0]
+                } elseif {$i == "$end_1st"} {
+                        set fanoutTable($i) "${start}-inf -${lat}"
+                        set start $tableIndex
+                        set lat [expr 1.0 * $timingDeltaTableForCgEnable($tableIndex) / 1000.0]
+                } elseif {$i == "$size"} {
+                        set end [expr $tableIndex -1]
+                        set fanoutTable2nd($i) "${start}-${end} -${lat}"
+                        set start $tableIndex
+                        set lat [expr 1.0 * $timingDeltaTableForCgEnable($tableIndex) / 1000.0]
+                } elseif {$i > "$end_1st"} {
+                        set end [expr $tableIndex -1]
+                        set fanoutTable2nd($i) "${start}-${end} -${lat}"
+                        set start $tableIndex
+                        set lat [expr 1.0 * $timingDeltaTableForCgEnable($tableIndex) / 1000.0]
+                }
+                incr i 
+        }
+        set fanoutTable2nd($i) "${start}-inf -${lat}"
+        puts "set_clock_gate_latency -stage 0 -fanout_latency {1-inf 0} -overwrite"
+        set_clock_gate_latency -stage 0 -fanout_latency {1-inf 0} -overwrite
+        set i 0
+        foreach fanout_lat [lsort -integer [array names fanoutTable]] {
+                if {$i == "0"} {
+                        set fanout_latency "$fanoutTable($fanout_lat)"
+                        incr i
+                } else {
+                        set fanout_latency "$fanout_latency, $fanoutTable($fanout_lat)"
+                }
+        }
+        set i 0
+        foreach fanout_lat [lsort -integer [array names fanoutTable2nd]] {
+                if {$i == "0"} {
+                        set fanout_latency2nd "$fanoutTable2nd($fanout_lat)"
+                        incr i
+                } else {
+                        set fanout_latency2nd "$fanout_latency2nd, $fanoutTable2nd($fanout_lat)"
+                }
+        }
+        
+        puts "set_clock_gate_latency -stage 1 -fanout_latency {$fanout_latency} -overwrite"
+        set_clock_gate_latency -stage 1 -fanout_latency "$fanout_latency" -overwrite
+        puts "set_clock_gate_latency -stage 2 -fanout_latency {$fanout_latency2nd} -overwrite"
+        set_clock_gate_latency -stage 2 -fanout_latency "$fanout_latency2nd" -overwrite
+    }
+}
+# Prevent ungrouping of specific hierarchies
+if {[info exists DONT_UNGROUP_LIST] && ${DONT_UNGROUP_LIST} != ""} {
+    set retVal {}
+    foreach single_design $dont_ungroup_list {
+        set gdCmd1 "get_designs \"$single_design\""
+        set gdList1 [eval $gdCmd1]
+        if { [sizeof_collection $gdList1] > 0 } {
+            set retVal [add_to_collection $retVal $gdList1]
+        }
+        set gdCmd2 "get_designs \"*\" -filter \"((defined(@original_design_name) && @original_design_name=~${single_design}) || (defined(@hdl_template) && @hdl_template=~${single_design})) \""
+        set gdList2 [eval $gdCmd2]
+        if { [sizeof_collection $gdList2] > 0 } {
+                set retVal [add_to_collection $retVal $gdList2 -unique]
+        }
+    }
+    foreach_in_collection local_design $retVal {
+        puts "Setting ungroup and boundary_optimization to false for [get_object_name $local_design]"
+        set_ungroup                        [get_object_name $local_design] false
+        set_boundary_optimization  [get_object_name $local_design] false
+    }
+    if { [sizeof_collection $retVal]} {
+        if {[shell_is_in_topographical_mode] && ![shell_is_in_exploration_mode]} {
+           puts " Also calling set_ahfs_options command to prevent certain forms of boundary optimization"
+           set_ahfs_options -preserve_boundary_phase true -no_port_punching $retVal
+       }
+    }
+}
+# Ungroup for area reduction
+setVar AREA_RECOVERY 1
+Info: Setting AREA_RECOVERY from env, value = 1
+if {[info exists AREA_RECOVERY] && ${AREA_RECOVERY} == 1} {
+        set_cost_priority {max_design_rules}
+        set_max_area 0.0
+}
+1
+write -f ddc -hier -o ${DB_DIR}/${MODULE}.precompile.ddc
+Writing ddc file 'nvdla_syn_20180611_1436/db/NV_NVDLA_CMAC_CORE_mac.precompile.ddc'.
+1
+# Compile commands
+set compile_command ""
+if {[shell_is_in_topographical_mode] && ${SYN_MODE} == "dcg" && ![shell_is_in_exploration_mode]} {
+        set compile_command "compile_ultra -no_seq_output_inversion  -gate_clock -spg -scan"
+} elseif {[shell_is_in_topographical_mode] && ![shell_is_in_exploration_mode]} {
+        set compile_command "compile_ultra -no_seq_output_inversion  -gate_clock -scan"
+} elseif {[shell_is_in_exploration_mode]} {
+    set compile_command "compile_exploration  -no_seq_output_inversion -gate_clock"
+}  else {
+    set compile_command "compile_ultra -no_seq_output_inversion -no_autoungroup -scan"
+}
+compile_ultra -no_seq_output_inversion -no_autoungroup -scan
+puts "${synMsgInfo} Structuring from scratch with compile command: $compile_command"
+Info: Structuring from scratch with compile command: compile_ultra -no_seq_output_inversion -no_autoungroup -scan
+eval $compile_command
+Warning: The compile_timing_high_effort variable is a hidden variable. When setting this variable to true with the compile_ultra command, the tool performs higher effort optimizations, resulting in a longer runtime than running compile_ultra without the variable. Use compile_ultra without the variable as the default optimization strategy, and enable the variable only when your design requires further timing optimization. 
+Note: The -timing_high_effort_script option is not required to enable the compile_timing_high_effort variable. (OPT-1343)
+Information: Performing power optimization. (PWR-850)
+Alib files are up-to-date.
+Information: Running optimization using a maximum of 8 cores. (OPT-1500)
+Information: Choosing a test methodology will restrict the optimization of sequential cells. (UIO-12)
+Loading db file '/space/tools/synopsys/syn-L-2016.03-SP5-2/libraries/syn/dw_foundation.sldb'
+Information: Failed to find dw_foundation.sldb in the user defined search_path, load it from 'Synopsys Root'. (UISN-70)
+Warning: DesignWare synthetic library dw_foundation.sldb is added to the synthetic_library in the current command. (UISN-40)
+Information: Evaluating DesignWare library utilization. (UISN-27)
+
+============================================================================
+| DesignWare Building Block Library  |         Version         | Available |
+============================================================================
+| Basic DW Building Blocks           | L-2016.03-DWBB_201603.5.1 |   *     |
+| Licensed DW Building Blocks        | L-2016.03-DWBB_201603.5.1 |   *     |
+============================================================================
+
+Information: Performing automatic clock gating circuitry identification in design 'NV_NVDLA_CMAC_CORE_mac'. (PWR-757)
+Information: No gating element has been automatically identified (PWR-878)
+
+Information: There are 6750 potential problems in your design. Please run 'check_design' for more information. (LINT-99)
+
+Information: Uniquified 64 instances of design 'mult16'. (OPT-1056)
+Information: Uniquified 256 instances of design 'mult8x8'. (OPT-1056)
+Information: Uniquified 1024 instances of design 'mult4x4'. (OPT-1056)
+Information: Uniquified 4096 instances of design 'mult2x2'. (OPT-1056)
+  Loading target library 'CMOS045_SC_14_CORE_LS'
+  Simplifying Design 'NV_NVDLA_CMAC_CORE_mac'
+
+Loaded alib file 'nvdla_syn_20180611_1436/design_lib/NV_NVDLA_CMAC_CORE_mac/alib-52/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db.alib'
+Information: State dependent leakage is now switched from on to off.
+
+  Beginning Pass 1 Mapping
+  ------------------------
+  Processing 'NV_NVDLA_CMAC_CORE_mac'
+Information: The register 'mac_out_data_reg[44]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[45]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[46]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[47]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[48]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[49]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[50]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[51]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[52]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[53]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[54]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[55]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[56]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[57]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[58]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[59]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[60]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[61]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[62]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[63]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[64]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[65]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[66]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[67]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[68]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[69]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[70]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[71]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[72]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[73]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[74]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[75]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[76]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[77]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[78]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[79]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[80]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[81]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[82]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[83]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[84]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[85]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[86]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[87]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[88]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[89]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[90]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[91]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[92]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[93]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[94]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[95]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[96]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[97]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[98]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[99]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[100]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[101]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[102]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[103]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[104]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[105]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[106]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[107]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[108]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[109]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[110]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[111]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[112]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[113]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[114]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[115]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[116]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[117]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[118]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[119]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[120]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[121]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[122]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[123]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[124]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[125]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[126]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[127]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[128]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[129]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[130]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[131]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[132]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[133]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[134]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[135]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[136]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[137]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[138]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[139]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[140]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[141]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[142]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[143]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[144]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[145]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[146]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[147]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[148]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[149]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[150]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[151]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[152]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[153]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[154]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[155]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[156]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[157]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[158]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[159]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[160]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[161]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[162]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[163]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[164]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[165]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[166]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[167]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[168]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[169]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[170]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[171]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[172]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[173]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[174]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_reg[175]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_w_reg[38]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_w_reg[39]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_w_reg[39]' will be removed. (OPT-1207)
+Information: The register 'mac_out_data_w_reg[40]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_w_reg[40]' will be removed. (OPT-1207)
+Information: The register 'mac_out_data_w_reg[41]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_w_reg[41]' will be removed. (OPT-1207)
+Information: The register 'mac_out_data_w_reg[42]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_w_reg[42]' will be removed. (OPT-1207)
+Information: The register 'mac_out_data_w_reg[43]' is a constant and will be removed. (OPT-1206)
+Information: The register 'mac_out_data_w_reg[43]' will be removed. (OPT-1207)
+Information: The register 'mac_out_nan_reg' is a constant and will be removed. (OPT-1206)
+Information: In design 'NV_NVDLA_CMAC_CORE_mac', the register 'mac_out_data_w2_reg[39]' is removed because it is merged to 'mac_out_data_w2_reg[38]'. (OPT-1215)
+Information: In design 'NV_NVDLA_CMAC_CORE_mac', the register 'mac_out_data_w2_reg[40]' is removed because it is merged to 'mac_out_data_w2_reg[38]'. (OPT-1215)
+Information: In design 'NV_NVDLA_CMAC_CORE_mac', the register 'mac_out_data_w2_reg[41]' is removed because it is merged to 'mac_out_data_w2_reg[38]'. (OPT-1215)
+Information: In design 'NV_NVDLA_CMAC_CORE_mac', the register 'mac_out_data_w2_reg[42]' is removed because it is merged to 'mac_out_data_w2_reg[38]'. (OPT-1215)
+Information: In design 'NV_NVDLA_CMAC_CORE_mac', the register 'mac_out_data_w2_reg[43]' is removed because it is merged to 'mac_out_data_w2_reg[38]'. (OPT-1215)
+Information: In design 'NV_NVDLA_CMAC_CORE_mac', the register 'mac_out_data_reg[39]' is removed because it is merged to 'mac_out_data_reg[38]'. (OPT-1215)
+Information: In design 'NV_NVDLA_CMAC_CORE_mac', the register 'mac_out_data_reg[40]' is removed because it is merged to 'mac_out_data_reg[38]'. (OPT-1215)
+Information: In design 'NV_NVDLA_CMAC_CORE_mac', the register 'mac_out_data_reg[41]' is removed because it is merged to 'mac_out_data_reg[38]'. (OPT-1215)
+Information: In design 'NV_NVDLA_CMAC_CORE_mac', the register 'mac_out_data_reg[42]' is removed because it is merged to 'mac_out_data_reg[38]'. (OPT-1215)
+Information: In design 'NV_NVDLA_CMAC_CORE_mac', the register 'mac_out_data_reg[43]' is removed because it is merged to 'mac_out_data_reg[38]'. (OPT-1215)
+ Implement Synthetic for 'NV_NVDLA_CMAC_CORE_mac'.
+Information: The register 'mac_out_data_w2_reg[38]' is a constant and will be removed. (OPT-1206)
+  Processing 'mult16_0'
+ Implement Synthetic for 'mult16_0'.
+  Processing 'mult16_63'
+ Implement Synthetic for 'mult16_63'.
+  Processing 'mult8x8_0'
+ Implement Synthetic for 'mult8x8_0'.
+Information: Added key list 'DesignWare' to design 'mult8x8_0'. (DDB-72)
+  Processing 'mult8x8_255'
+ Implement Synthetic for 'mult8x8_255'.
+Information: Added key list 'DesignWare' to design 'mult8x8_255'. (DDB-72)
+  Processing 'mult4x4_0'
+ Implement Synthetic for 'mult4x4_0'.
+Information: Added key list 'DesignWare' to design 'mult4x4_0'. (DDB-72)
+  Processing 'mult4x4_1023'
+ Implement Synthetic for 'mult4x4_1023'.
+Information: Added key list 'DesignWare' to design 'mult4x4_1023'. (DDB-72)
+  Processing 'mult2x2_0'
+
+  Updating timing information
+Information: Updating design information... (UID-85)
+Information: Automatic shift-register identification is enabled for scan. Not all registers will be scan-replaced. (OPT-467)
+Information: The register 'mac_out_data_reg[38]' is a constant and will be removed. (OPT-1206)
+
+  Beginning Mapping Optimizations  (Ultra High effort)
+  -------------------------------
+Information: Added key list 'DesignWare' to design 'NV_NVDLA_CMAC_CORE_mac'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_63'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_62'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_0'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_1'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_2'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_3'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_4'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_5'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_6'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_7'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_8'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_9'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_10'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_11'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_12'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_13'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_14'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_15'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_16'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_17'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_18'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_19'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_20'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_21'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_22'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_23'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_24'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_25'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_26'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_27'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_28'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_29'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_30'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_31'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_32'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_33'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_34'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_35'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_36'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_37'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_38'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_39'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_40'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_41'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_42'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_43'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_44'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_45'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_46'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_47'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_48'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_49'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_50'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_51'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_52'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_53'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_54'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_55'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_56'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_57'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_58'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_59'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_60'. (DDB-72)
+Information: Added key list 'DesignWare' to design 'mult16_61'. (DDB-72)
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:01:33  122842.5    0.0000    0.0000      21.5                              0.0101
+  0:01:33  122842.5    0.0000    0.0000      21.5                              0.0101
+  0:01:33  122842.5    0.0000    0.0000      21.5                              0.0101
+  0:01:33  122842.5    0.0000    0.0000      21.5                              0.0101
+  Re-synthesis Optimization (Phase 1)
+  Re-synthesis Optimization (Phase 2)
+  Global Optimization (Phase 1)
+  Global Optimization (Phase 2)
+  Global Optimization (Phase 3)
+  Global Optimization (Phase 4)
+  Global Optimization (Phase 5)
+  Global Optimization (Phase 6)
+  Global Optimization (Phase 7)
+  Global Optimization (Phase 8)
+  Global Optimization (Phase 9)
+  Global Optimization (Phase 10)
+  Global Optimization (Phase 11)
+  Global Optimization (Phase 12)
+  Global Optimization (Phase 13)
+  Global Optimization (Phase 14)
+  Global Optimization (Phase 15)
+  Global Optimization (Phase 16)
+  Global Optimization (Phase 17)
+  Global Optimization (Phase 18)
+  Global Optimization (Phase 19)
+  Global Optimization (Phase 20)
+  Global Optimization (Phase 21)
+  Global Optimization (Phase 22)
+  Global Optimization (Phase 23)
+  Global Optimization (Phase 24)
+  Global Optimization (Phase 25)
+  Global Optimization (Phase 26)
+  Global Optimization (Phase 27)
+  Global Optimization (Phase 28)
+
+
+
+  Beginning Delay Optimization Phase
+  ----------------------------------
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:01:47  122704.5    0.0000    0.0000       8.2                              0.0137
+  0:01:47  122704.5    0.0000    0.0000       8.2                              0.0137
+  0:01:53  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:54  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:54  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:54  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:54  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:54  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:55  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:55  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:56  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:56  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:56  122704.5    0.0000    0.0000       8.2                              0.0100
+
+  Beginning Delay Optimization
+  ----------------------------
+  0:01:56  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:57  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:57  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:57  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:58  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:58  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:58  122704.5    0.0000    0.0000       8.2                              0.0100
+  0:01:59  122704.5    0.0000    0.0000       8.2                              0.0100
+
+
+  Beginning Design Rule Fixing  (max_transition)  (max_capacitance)
+  ----------------------------
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:01:59  122704.5    0.0000    0.0000       8.2                              0.0100
+  Global Optimization (Phase 29)
+  Global Optimization (Phase 30)
+  Global Optimization (Phase 31)
+  0:02:05  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:06  122704.5    0.0000    0.0000       0.0                              0.0101
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:02:08  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:02:08  122802.6    0.0000    0.0000       0.0                              0.0101
+
+
+  Beginning Leakage Power Optimization  (max_leakage_power 0)
+  ------------------------------------
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:02:23  122704.5    0.0000    0.0000       0.0                              0.0101
+  Global Optimization (Phase 32)
+  Global Optimization (Phase 33)
+  Global Optimization (Phase 34)
+  Global Optimization (Phase 35)
+  Global Optimization (Phase 36)
+  Global Optimization (Phase 37)
+  Global Optimization (Phase 38)
+  Global Optimization (Phase 39)
+  Global Optimization (Phase 40)
+  Global Optimization (Phase 41)
+  Global Optimization (Phase 42)
+  0:02:25  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:26  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:26  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:30  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:30  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:31  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:31  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:31  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:31  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:31  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:31  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:32  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:32  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:32  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:32  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:33  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:33  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:34  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:34  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:34  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:34  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:35  122704.5    0.0000    0.0000       0.0                              0.0101
+
+
+  Beginning More Opto Phase
+  -------------------------
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:02:35  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:36  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:36  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:36  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:36  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:36  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:36  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:02:37  122704.5    0.0000    0.0000       0.0                              0.0101
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:02:41  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:02:45  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:02:45  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:02:45  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:02:48  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:02:49  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:02:49  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:02:50  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:02:50  122802.6    0.0000    0.0000       0.0                              0.0101
+Loading db file '/space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db'
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+Information: State dependent leakage is now switched from off to on.
+Information: Propagating switching activity (low effort zero delay simulation). (PWR-6)
+Warning: There is no defined clock in the design. (PWR-80)
+1
+# Dump database and generate reports 
+write -f ddc -hier -o ${DB_DIR}/${MODULE}.preincr.ddc
+Writing ddc file 'nvdla_syn_20180611_1436/db/NV_NVDLA_CMAC_CORE_mac.preincr.ddc'.
+1
+writeReports "preincr"
+setVar INCREMENTAL_RECOMPILE_COUNT 0
+Info: Setting INCREMENTAL_RECOMPILE_COUNT from env, value = 2
+if {![shell_is_in_exploration_mode]} {
+    set incr_recompile_command "${compile_command} -incremental" 
+    for { set currentIncrRecompilePass 0 } { $currentIncrRecompilePass < $INCREMENTAL_RECOMPILE_COUNT  } { incr currentIncrRecompilePass } {
+        puts "${synMsgInfo} Incrementally recompiling (PASS [expr $currentIncrRecompilePass + 1] ), with command: $incr_recompile_command"
+        eval $incr_recompile_command
+        
+        # Dump database and generate reports 
+        write -f ddc -hier -o ${DB_DIR}/${MODULE}.postincr.[expr $currentIncrRecompilePass + 1].ddc
+        writeReports "postincr.[expr $currentIncrRecompilePass + 1]"
+    }
+} else {
+    puts "${synMsgInfo} Incremental compiles are not supported in Design Explorer. Skipping" 
+}
+Info: Incrementally recompiling (PASS 1 ), with command: compile_ultra -no_seq_output_inversion -no_autoungroup -scan -incremental
+Warning: The compile_timing_high_effort variable is a hidden variable. When setting this variable to true with the compile_ultra command, the tool performs higher effort optimizations, resulting in a longer runtime than running compile_ultra without the variable. Use compile_ultra without the variable as the default optimization strategy, and enable the variable only when your design requires further timing optimization. 
+Note: The -timing_high_effort_script option is not required to enable the compile_timing_high_effort variable. (OPT-1343)
+Information: Performing power optimization. (PWR-850)
+Alib files are up-to-date.
+Information: Running optimization using a maximum of 8 cores. (OPT-1500)
+Information: Choosing a test methodology will restrict the optimization of sequential cells. (UIO-12)
+Information: Failed to find dw_foundation.sldb in the user defined search_path, load it from 'Synopsys Root'. (UISN-70)
+Warning: DesignWare synthetic library dw_foundation.sldb is added to the synthetic_library in the current command. (UISN-40)
+
+Information: There are 5338 potential problems in your design. Please run 'check_design' for more information. (LINT-99)
+
+
+Loaded alib file 'nvdla_syn_20180611_1436/design_lib/NV_NVDLA_CMAC_CORE_mac/alib-52/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db.alib'
+Information: State dependent leakage is now switched from on to off.
+
+  Beginning Pass 1 Mapping  (Incremental)
+  ------------------------
+
+  Updating timing information
+Information: Updating design information... (UID-85)
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:00:16  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:00:16  122802.6    0.0000    0.0000       0.0                              0.0101
+
+  Beginning Mapping Optimizations  (Ultra High effort)  (Incremental)
+  -------------------------------
+
+  Beginning Incremental Implementation Selection
+  ----------------------------------------------
+  0:00:36  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:36  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:36  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:36  122704.5    0.0000    0.0000       0.0                              0.0101
+  Global Optimization (Phase 43)
+  Global Optimization (Phase 44)
+  Global Optimization (Phase 45)
+  Global Optimization (Phase 46)
+
+
+
+  Beginning Delay Optimization Phase
+  ----------------------------------
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:00:37  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:37  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:40  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:41  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:41  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:41  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:41  122704.5    0.0000    0.0000       0.0                              0.0101
+
+  Beginning Delay Optimization
+  ----------------------------
+  0:00:41  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:42  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:42  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:42  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:42  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:42  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:42  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:46  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:46  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:46  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:46  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:47  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:47  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:47  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:47  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:48  122704.5    0.0000    0.0000       0.0                              0.0101
+
+
+  Beginning Leakage Power Optimization  (max_leakage_power 0)
+  ------------------------------------
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:00:48  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:49  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:52  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:52  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:52  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:52  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:53  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:53  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:54  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:54  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:54  122704.5    0.0000    0.0000       0.0                              0.0101
+
+
+  Beginning More Opto Phase
+  -------------------------
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:00:55  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:55  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:55  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:55  122704.5    0.0000    0.0000       0.0                              0.0101
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:00:58  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:01:02  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:01:04  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:01:04  122802.6    0.0000    0.0000       0.0                              0.0101
+Loading db file '/space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db'
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+Information: State dependent leakage is now switched from off to on.
+Information: Propagating switching activity (low effort zero delay simulation). (PWR-6)
+Warning: There is no defined clock in the design. (PWR-80)
+Writing ddc file 'nvdla_syn_20180611_1436/db/NV_NVDLA_CMAC_CORE_mac.postincr.1.ddc'.
+Info: Incrementally recompiling (PASS 2 ), with command: compile_ultra -no_seq_output_inversion -no_autoungroup -scan -incremental
+Warning: The compile_timing_high_effort variable is a hidden variable. When setting this variable to true with the compile_ultra command, the tool performs higher effort optimizations, resulting in a longer runtime than running compile_ultra without the variable. Use compile_ultra without the variable as the default optimization strategy, and enable the variable only when your design requires further timing optimization. 
+Note: The -timing_high_effort_script option is not required to enable the compile_timing_high_effort variable. (OPT-1343)
+Information: Performing power optimization. (PWR-850)
+Alib files are up-to-date.
+Information: Running optimization using a maximum of 8 cores. (OPT-1500)
+Information: Choosing a test methodology will restrict the optimization of sequential cells. (UIO-12)
+Information: Failed to find dw_foundation.sldb in the user defined search_path, load it from 'Synopsys Root'. (UISN-70)
+Warning: DesignWare synthetic library dw_foundation.sldb is added to the synthetic_library in the current command. (UISN-40)
+
+Information: There are 5338 potential problems in your design. Please run 'check_design' for more information. (LINT-99)
+
+
+Information: State dependent leakage is now switched from on to off.
+
+  Beginning Pass 1 Mapping  (Incremental)
+  ------------------------
+
+  Updating timing information
+Information: Updating design information... (UID-85)
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:00:15  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:00:15  122802.6    0.0000    0.0000       0.0                              0.0101
+
+  Beginning Mapping Optimizations  (Ultra High effort)  (Incremental)
+  -------------------------------
+
+  Beginning Incremental Implementation Selection
+  ----------------------------------------------
+  0:00:34  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:34  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:34  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:34  122704.5    0.0000    0.0000       0.0                              0.0101
+  Global Optimization (Phase 47)
+  Global Optimization (Phase 48)
+  Global Optimization (Phase 49)
+  Global Optimization (Phase 50)
+
+
+
+  Beginning Delay Optimization Phase
+  ----------------------------------
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:00:35  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:35  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:39  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:39  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:39  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:39  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:40  122704.5    0.0000    0.0000       0.0                              0.0101
+
+  Beginning Delay Optimization
+  ----------------------------
+  0:00:40  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:40  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:40  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:41  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:41  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:41  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:41  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:44  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:45  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:45  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:45  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:45  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:45  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:46  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:46  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:46  122704.5    0.0000    0.0000       0.0                              0.0101
+
+
+  Beginning Leakage Power Optimization  (max_leakage_power 0)
+  ------------------------------------
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:00:46  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:47  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:51  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:51  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:51  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:51  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:52  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:52  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:52  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:52  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:53  122704.5    0.0000    0.0000       0.0                              0.0101
+
+
+  Beginning More Opto Phase
+  -------------------------
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:00:53  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:53  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:53  122704.5    0.0000    0.0000       0.0                              0.0101
+  0:00:53  122704.5    0.0000    0.0000       0.0                              0.0101
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:00:56  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:01:00  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:01:02  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:01:02  122802.6    0.0000    0.0000       0.0                              0.0101
+Loading db file '/space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db'
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+Information: State dependent leakage is now switched from off to on.
+Information: Propagating switching activity (low effort zero delay simulation). (PWR-6)
+Warning: There is no defined clock in the design. (PWR-80)
+Writing ddc file 'nvdla_syn_20180611_1436/db/NV_NVDLA_CMAC_CORE_mac.postincr.2.ddc'.
+# Run area recovery
+if {![shell_is_in_exploration_mode]} {
+    if {[info exists AREA_RECOVERY] && $AREA_RECOVERY ==1 } {
+             ungroup -all -flatten  
+             optimize_netlist -area
+    }
+}
+Information: Performing power optimization. (PWR-850)
+Alib files are up-to-date.
+Information: Running optimization using a maximum of 8 cores. (OPT-1500)
+Information: Failed to find dw_foundation.sldb in the user defined search_path, load it from 'Synopsys Root'. (UISN-70)
+Warning: DesignWare synthetic library dw_foundation.sldb is added to the synthetic_library in the current command. (UISN-40)
+
+Information: There are 1114 potential problems in your design. Please run 'check_design' for more information. (LINT-99)
+
+
+
+  Updating timing information
+Information: Updating design information... (UID-85)
+
+
+  Beginning Area Optimization
+  -----------------------------
+
+                                TOTAL                                                
+ ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+  TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+--------- --------- --------- --------- --------- ------------------------- ---------
+  0:00:03  122802.6    0.0000    0.0000       0.0                              0.0101
+  0:00:57  122687.3    0.0000    0.0000       0.0                              0.0100
+Loading db file '/space/edalibs/unicad_45nm/CMOS045_SC_14_CORE_LS_SNPS-AVT-CDS_3.0/libs/CMOS045_SC_14_CORE_LS_nom_1.10V_25C.db'
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+1
+# Dump all design collaterals
+write -f ddc -hier -o ${DB_DIR}/${MODULE}.ddc
+Writing ddc file 'nvdla_syn_20180611_1436/db/NV_NVDLA_CMAC_CORE_mac.ddc'.
+1
+write_sdc -nosplit ${NET_DIR}/${MODULE}.sdc 
+1
+write -format verilog -hierarchy -out ${NET_DIR}/${MODULE}.gv
+Writing verilog file '/home/goldman/hw/simulation1/hw/nvdla_syn_20180611_1436/net/NV_NVDLA_CMAC_CORE_mac.gv'.
+1
+# Invoking write_def commands requires a Design Compiler Graphical license or an IC Compiler
+if {[shell_is_in_topographical_mode] && ($SYN_MODE == "dcg")} {
+        write_def -output ${NET_DIR}/${MODULE}.full.def -all_vias -routed_nets -vias -components -specialnets -pins -blockages
+}
+# Generate final reports
+writeReports "final"
+redirect ${REPORT_DIR}/${MODULE}.check_design { check_design }
+redirect ${REPORT_DIR}/${MODULE}.check_timing { check_timing }
+# Stop recording the SVF. 
+set_svf -off
+1
+# Print out summary of generated design collateral
+puts "${synMsgInfo} GENERATED NETLIST: ${NET_DIR}/${MODULE}.gv"
+Info: GENERATED NETLIST: nvdla_syn_20180611_1436/net/NV_NVDLA_CMAC_CORE_mac.gv
+puts "${synMsgInfo} GENERATED DEF:     ${NET_DIR}/${MODULE}.full.def"
+Info: GENERATED DEF:     nvdla_syn_20180611_1436/net/NV_NVDLA_CMAC_CORE_mac.full.def
+puts "${synMsgInfo} GENERATED SDC:     ${NET_DIR}/${MODULE}.sdc"
+Info: GENERATED SDC:     nvdla_syn_20180611_1436/net/NV_NVDLA_CMAC_CORE_mac.sdc
+puts "${synMsgInfo} GENERATED DDC:     ${DB_DIR}/${MODULE}.ddc"
+Info: GENERATED DDC:     nvdla_syn_20180611_1436/db/NV_NVDLA_CMAC_CORE_mac.ddc
+puts "${synMsgInfo} GENERATED REPORTS: \n\t[join [glob "${REPORT_DIR}/*${MODULE}*"] "\n\t"]"
+Info: GENERATED REPORTS: 
+        nvdla_syn_20180611_1436/report/NV_NVDLA_CMAC_CORE_mac.preincr.report
+        nvdla_syn_20180611_1436/report/NV_NVDLA_CMAC_CORE_mac.postincr.1.report
+        nvdla_syn_20180611_1436/report/NV_NVDLA_CMAC_CORE_mac.postincr.2.report
+        nvdla_syn_20180611_1436/report/NV_NVDLA_CMAC_CORE_mac.final.report
+        nvdla_syn_20180611_1436/report/NV_NVDLA_CMAC_CORE_mac.check_design
+        nvdla_syn_20180611_1436/report/NV_NVDLA_CMAC_CORE_mac.check_timing
+# Close the MW libs
+if {[shell_is_in_topographical_mode]} {
+    close_mw_lib 
+}
+# finish
+exit
+
+Thank you...
+

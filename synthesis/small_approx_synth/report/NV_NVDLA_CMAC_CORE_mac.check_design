@@ -1,0 +1,49 @@
+ 
+****************************************
+check_design summary:
+Version:     L-2016.03-SP5-2
+Date:        Mon Jun 11 16:29:28 2018
+****************************************
+
+                   Name                                            Total
+--------------------------------------------------------------------------------
+Inputs/Outputs                                                     35
+    Unconnected ports (LINT-28)                                    35
+--------------------------------------------------------------------------------
+
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'nvdla_wg_clk' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'nvdla_core_rstn' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'cfg_is_wg' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'dat_actv_nz[7]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'dat_actv_nz[6]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'dat_actv_nz[5]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'dat_actv_nz[4]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'dat_actv_nz[3]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'dat_actv_nz[2]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'dat_actv_nz[1]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'dat_actv_nz[0]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'dat_actv_pvld[7]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'dat_actv_pvld[6]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'dat_actv_pvld[5]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'dat_actv_pvld[4]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'dat_actv_pvld[3]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'dat_actv_pvld[2]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'dat_actv_pvld[1]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'dat_actv_pvld[0]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'wt_actv_nz[7]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'wt_actv_nz[6]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'wt_actv_nz[5]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'wt_actv_nz[4]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'wt_actv_nz[3]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'wt_actv_nz[2]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'wt_actv_nz[1]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'wt_actv_nz[0]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'wt_actv_pvld[7]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'wt_actv_pvld[6]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'wt_actv_pvld[5]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'wt_actv_pvld[4]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'wt_actv_pvld[3]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'wt_actv_pvld[2]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'wt_actv_pvld[1]' is not connected to any nets. (LINT-28)
+Warning: In design 'NV_NVDLA_CMAC_CORE_mac', port 'wt_actv_pvld[0]' is not connected to any nets. (LINT-28)
+1
