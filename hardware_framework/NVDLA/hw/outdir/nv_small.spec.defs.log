@@ -1,0 +1,2 @@
+command: cd spec/defs;make PROJECT=nv_small.spec 
+make: *** No rule to make target `nv_small.spec.spec', needed by `/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small.spec/spec/defs/project.def'.  Stop.

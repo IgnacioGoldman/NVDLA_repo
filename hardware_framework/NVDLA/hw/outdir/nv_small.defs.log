@@ -1,0 +1,15 @@
+command: cd spec/defs;make PROJECT=nv_small 
+/usr/bin/cpp -undef -nostdinc -P -C nv_small.spec -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.def
+/usr/bin/python ../../tools/bin/defgen -i /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.def -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.h -b c
+Warning: current Python version is under 3.0, to avoid unexpected behavior, please use Python 3.5 or later version. This warning will turn into an exception in future.
+/usr/bin/python ../../tools/bin/defgen -i /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.def -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.vh -b v
+Warning: current Python version is under 3.0, to avoid unexpected behavior, please use Python 3.5 or later version. This warning will turn into an exception in future.
+/usr/bin/python ../../tools/bin/defgen -i /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.def -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.py -b py
+Warning: current Python version is under 3.0, to avoid unexpected behavior, please use Python 3.5 or later version. This warning will turn into an exception in future.
+/usr/bin/python ../../tools/bin/defgen -i /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.def -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.mk -b mk
+Warning: current Python version is under 3.0, to avoid unexpected behavior, please use Python 3.5 or later version. This warning will turn into an exception in future.
+/usr/bin/python ../../tools/bin/defgen -i /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.def -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.pm -b pm
+Warning: current Python version is under 3.0, to avoid unexpected behavior, please use Python 3.5 or later version. This warning will turn into an exception in future.
+==============================================
+files are generated under /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs
+==============================================

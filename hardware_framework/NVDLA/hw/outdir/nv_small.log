@@ -1,0 +1,89 @@
+/usr/bin/cpp -undef -nostdinc -P -C nv_small.spec -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.def
+/usr/bin/python ../../tools/bin/defgen -i /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.def -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.h -b c
+Warning: current Python version is under 3.0, to avoid unexpected behavior, please use Python 3.5 or later version. This warning will turn into an exception in future.
+/usr/bin/python ../../tools/bin/defgen -i /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.def -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.vh -b v
+Warning: current Python version is under 3.0, to avoid unexpected behavior, please use Python 3.5 or later version. This warning will turn into an exception in future.
+/usr/bin/python ../../tools/bin/defgen -i /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.def -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.py -b py
+Warning: current Python version is under 3.0, to avoid unexpected behavior, please use Python 3.5 or later version. This warning will turn into an exception in future.
+/usr/bin/python ../../tools/bin/defgen -i /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.def -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.mk -b mk
+Warning: current Python version is under 3.0, to avoid unexpected behavior, please use Python 3.5 or later version. This warning will turn into an exception in future.
+/usr/bin/python ../../tools/bin/defgen -i /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.def -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs/project.pm -b pm
+Warning: current Python version is under 3.0, to avoid unexpected behavior, please use Python 3.5 or later version. This warning will turn into an exception in future.
+==============================================
+files are generated under /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/defs
+==============================================
+../../tools/bin/vcp -i NVDLA_CSC.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CSC.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i NVDLA_BDMA.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_BDMA.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i NVDLA_CACC.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CACC.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i NVDLA_CDMA.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CDMA.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i NVDLA_CDP.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CDP.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i NVDLA_CDP_RDMA.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CDP_RDMA.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i NVDLA_CMAC_A.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CMAC_A.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i NVDLA_CMAC_B.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CMAC_B.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i NVDLA_CVIF.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CVIF.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i NVDLA_GEC.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_GEC.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i NVDLA_GLB.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_GLB.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i NVDLA_MCIF.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_MCIF.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i NVDLA_PDP.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_PDP.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i NVDLA_PDP_RDMA.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_PDP_RDMA.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i NVDLA_RBK.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_RBK.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i NVDLA_SDP.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_SDP.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i NVDLA_SDP_RDMA.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_SDP_RDMA.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i nvdla.rdl -o /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/nvdla.rdl -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+/usr/bin/perl /home/goldman/hardware_framework/NVDLA/hw/spec/manual/RDLMerge.pl /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/nvdla.rdl /usr/bin/java /usr/bin/perl /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual
+Open Register Design Tool, version=171103.01, input=NVDLA_CFGROM.rdl
+Ordt: reading parameters from opendla.parms...
+Ordt: building verilog...
+Ordt: writing verilog file /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CFGROM_reg.v...
+Ordt: building UVM regs...
+Ordt: writing UVM regs file /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CFGROM_reg.sv...
+Ordt: building UVM regs package...
+Ordt: writing UVM regs package file /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/ordt_uvm_reg_pkg.sv...
+Ordt: building xml...
+Ordt: writing xml file /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CFGROM.xml...
+Ordt: building C++ model...
+Ordt: writing C++ model file /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CFGROM_reg_c/ordt_pio_common.hpp...
+Ordt: writing C++ model file /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CFGROM_reg_c/ordt_pio_common.cpp...
+Ordt: writing C++ model file /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CFGROM_reg_c/ordt_pio.hpp...
+Ordt: writing C++ model file /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CFGROM_reg_c/ordt_pio.cpp...
+Ordt complete Fri Jul 06 14:07:12 CEST 2018
+Processing NVDLA_CSC.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CSC.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CSC.rdl successfully written
+Processing NVDLA_BDMA.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_BDMA.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_BDMA.rdl successfully written
+Processing NVDLA_CACC.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CACC.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CACC.rdl successfully written
+Processing NVDLA_CDMA.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CDMA.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CDMA.rdl successfully written
+Processing NVDLA_CDP.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CDP.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CDP.rdl successfully written
+Processing NVDLA_CDP_RDMA.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CDP_RDMA.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CDP_RDMA.rdl successfully written
+Processing NVDLA_CMAC_A.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CMAC_A.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CMAC_A.rdl successfully written
+Processing NVDLA_CMAC_B.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CMAC_B.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CMAC_B.rdl successfully written
+Processing NVDLA_CVIF.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CVIF.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_CVIF.rdl successfully written
+Processing NVDLA_GEC.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_GEC.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_GEC.rdl successfully written
+Processing NVDLA_GLB.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_GLB.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_GLB.rdl successfully written
+Processing NVDLA_MCIF.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_MCIF.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_MCIF.rdl successfully written
+Processing NVDLA_PDP.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_PDP.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_PDP.rdl successfully written
+Processing NVDLA_PDP_RDMA.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_PDP_RDMA.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_PDP_RDMA.rdl successfully written
+Processing NVDLA_RBK.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_RBK.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_RBK.rdl successfully written
+Processing NVDLA_SDP.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_SDP.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_SDP.rdl successfully written
+Processing NVDLA_SDP_RDMA.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_SDP_RDMA.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/NVDLA_SDP_RDMA.rdl successfully written
+Processing nvdla.rdl into /home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/nvdla.rdl
+/home/goldman/hardware_framework/NVDLA/hw/outdir/nv_small/spec/manual/nvdla.rdl successfully written
+Can't locate XML/Simple.pm in @INC (@INC contains: /usr/local/lib64/perl5 /usr/local/share/perl5 /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5 /usr/share/perl5 .) at ORDT_xml2others.pl line 12.
+BEGIN failed--compilation aborted at ORDT_xml2others.pl line 12.
+Inappropriate ioctl for device at /home/goldman/hardware_framework/NVDLA/hw/spec/manual/RDLMerge.pl line 51, <FILE> line 1.
+make: *** [OUT_FILES] Error 25
