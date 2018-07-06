@@ -1,0 +1,14 @@
+command: cd vmod/include;make PROJECT=nv_small 
+../../tools/bin/vcp -i NV_HWACC_NVDLA_tick_defines.vh -o ../../outdir/nv_small/vmod/include/NV_HWACC_NVDLA_tick_defines.vh.vcp -imacros ../../outdir/nv_small/spec/defs/project.h -inc /home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/vmod/include -inc ../../outdir/nv_small/spec/manual -cpp /usr/bin/cpp
+/usr/bin/perl -I ../../vmod/plugins -Meperl ../../tools/bin/eperl -o ../../outdir/nv_small/vmod/include/NV_HWACC_NVDLA_tick_defines.vh ../../outdir/nv_small/vmod/include/NV_HWACC_NVDLA_tick_defines.vh.vcp 
+../../tools/bin/vcp -i simulate_x_tick.vh -o ../../outdir/nv_small/vmod/include/simulate_x_tick.vh.vcp -imacros ../../outdir/nv_small/spec/defs/project.h -inc /home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/vmod/include -inc ../../outdir/nv_small/spec/manual -cpp /usr/bin/cpp
+/usr/bin/perl -I ../../vmod/plugins -Meperl ../../tools/bin/eperl -o ../../outdir/nv_small/vmod/include/simulate_x_tick.vh ../../outdir/nv_small/vmod/include/simulate_x_tick.vh.vcp 
+==============================================
+files are generated under /home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/outdir/nv_small/vmod/include
+==============================================
+Processing NV_HWACC_NVDLA_tick_defines.vh into ../../outdir/nv_small/vmod/include/NV_HWACC_NVDLA_tick_defines.vh.vcp
+../../outdir/nv_small/vmod/include/NV_HWACC_NVDLA_tick_defines.vh.vcp successfully written
+eperl: ../../outdir/nv_small/vmod/include/NV_HWACC_NVDLA_tick_defines.vh modified.
+Processing simulate_x_tick.vh into ../../outdir/nv_small/vmod/include/simulate_x_tick.vh.vcp
+../../outdir/nv_small/vmod/include/simulate_x_tick.vh.vcp successfully written
+eperl: ../../outdir/nv_small/vmod/include/simulate_x_tick.vh modified.

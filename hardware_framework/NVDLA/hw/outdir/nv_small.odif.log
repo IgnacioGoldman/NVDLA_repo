@@ -1,0 +1,14 @@
+command: cd spec/odif;make PROJECT=nv_small 
+../../tools/bin/vcp -i ./example.top.odif -o /home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/outdir/nv_small/spec/odif/./example.top.odif -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i ./example.interface.odif -o /home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/outdir/nv_small/spec/odif/./example.interface.odif -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+../../tools/bin/vcp -i ./example.module.odif -o /home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/outdir/nv_small/spec/odif/./example.module.odif -imacros ../../outdir/nv_small/spec/defs/project.h -cpp /usr/bin/cpp
+/usr/bin/perl /home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/spec/odif/ODIF2others.pl -o /home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/outdir/nv_small/spec/odif -f /home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/outdir/nv_small/spec/odif/example.top.odif -c -v -m
+==============================================
+files are generated under /home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/outdir/nv_small/spec/odif
+==============================================
+Processing ./example.top.odif into /home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/outdir/nv_small/spec/odif/./example.top.odif
+/home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/outdir/nv_small/spec/odif/./example.top.odif successfully written
+Processing ./example.interface.odif into /home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/outdir/nv_small/spec/odif/./example.interface.odif
+/home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/outdir/nv_small/spec/odif/./example.interface.odif successfully written
+Processing ./example.module.odif into /home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/outdir/nv_small/spec/odif/./example.module.odif
+/home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/outdir/nv_small/spec/odif/./example.module.odif successfully written

@@ -12,7 +12,6 @@ import NVDLA_PDP_RDMA.rdl
 import NVDLA_PDP.rdl
 import NVDLA_CDP_RDMA.rdl
 import NVDLA_CDP.rdl
-
 // Below sub-units are not used in nv_small. Keep them here to avoid cmod building error.
 import NVDLA_GEC.rdl
 import NVDLA_CVIF.rdl

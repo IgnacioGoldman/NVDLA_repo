@@ -5,7 +5,6 @@
 // NVDLA Open Hardware License; Check "LICENSE" which comes with
 // this distribution for more information.
 // ================================================================
-
 property spec_sw_default {
     type = number;
     component = field;

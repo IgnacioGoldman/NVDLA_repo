@@ -1,0 +1,9 @@
+command: cd vmod/nvdla/cbuf;make PROJECT=nv_small 
+../../../tools/bin/vcp -i NV_NVDLA_cbuf.v -o ../../../outdir/nv_small/vmod/nvdla/cbuf/NV_NVDLA_cbuf.v.vcp -imacros ../../../outdir/nv_small/spec/defs/project.h -inc /home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/vmod/include -inc ../../../outdir/nv_small/spec/manual -cpp /usr/bin/cpp
+/usr/bin/perl -I ../../../vmod/plugins -Meperl ../../../tools/bin/eperl -o ../../../outdir/nv_small/vmod/nvdla/cbuf/NV_NVDLA_cbuf.v ../../../outdir/nv_small/vmod/nvdla/cbuf/NV_NVDLA_cbuf.v.vcp 
+==============================================
+files are generated under /home/ignacio/Desktop/NVDLA_repo/NVDLA_repo/hardware_framework/NVDLA/hw/outdir/nv_small/vmod/nvdla/cbuf
+==============================================
+Processing NV_NVDLA_cbuf.v into ../../../outdir/nv_small/vmod/nvdla/cbuf/NV_NVDLA_cbuf.v.vcp
+../../../outdir/nv_small/vmod/nvdla/cbuf/NV_NVDLA_cbuf.v.vcp successfully written
+eperl: ../../../outdir/nv_small/vmod/nvdla/cbuf/NV_NVDLA_cbuf.v modified.
