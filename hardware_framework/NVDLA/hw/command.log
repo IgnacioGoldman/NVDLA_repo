@@ -1,6 +1,6 @@
 #@ # 
 #@ # Running dc_shell Version L-2016.03-SP5-2 for linux64 -- Dec 05, 2016
-#@ # Date:   Fri Jul  6 16:16:44 2018
+#@ # Date:   Sun Jul  8 16:11:17 2018
 #@ # Run by: goldman@philae
 #@ 
 
@@ -5577,8 +5577,8 @@ source /space/tools/synopsys/syn-L-2016.03-SP5-2/admin/setup/.synopsys_dc.setup
 #@ }
 #@ # -- End source /space/tools/synopsys/syn-L-2016.03-SP5-2/admin/setup/.synopsys_dc.setup
 
-source -echo -verbose /home/goldman/NVDLA_repo/hardware_framework/NVDLA/hw/nvdla_syn_20180706_1616/scripts/dc_run.tcl
-#@ # -- Starting source /home/goldman/NVDLA_repo/hardware_framework/NVDLA/hw/nvdla_syn_20180706_1616/scripts/dc_run.tcl
+source -echo -verbose /home/goldman/hardware_framework/NVDLA/hw/nvdla_syn_20180708_1611/scripts/dc_run.tcl
+#@ # -- Starting source /home/goldman/hardware_framework/NVDLA/hw/nvdla_syn_20180708_1611/scripts/dc_run.tcl
 
 #@ # ===================================================================
 #@ # File: syn/scripts/dc_run.tcl
@@ -6361,7 +6361,7 @@ source -echo -verbose /home/goldman/NVDLA_repo/hardware_framework/NVDLA/hw/nvdla
 #@     puts "${synMsgInfo} Sourcing ${SCRIPTS_DIR}/dc_app_vars.tcl"
 #@     source -echo -verbose ${SCRIPTS_DIR}/dc_app_vars.tcl
 #@ }
-#@ # -- Starting source nvdla_syn_20180706_1616/scripts/dc_app_vars.tcl
+#@ # -- Starting source nvdla_syn_20180708_1611/scripts/dc_app_vars.tcl
 
 #@ # ===================================================================
 #@ # File: syn/scripts/dc_app_vars.tcl
@@ -6479,7 +6479,7 @@ source -echo -verbose /home/goldman/NVDLA_repo/hardware_framework/NVDLA/hw/nvdla
 #@ 
 #@ 
 #@ 
-#@ # -- End source nvdla_syn_20180706_1616/scripts/dc_app_vars.tcl
+#@ # -- End source nvdla_syn_20180708_1611/scripts/dc_app_vars.tcl
 
 #@ 
 #@ # Make DC-G use the track definitions and not fill in the gaps with more routing resource!
@@ -6575,227 +6575,3 @@ source -echo -verbose /home/goldman/NVDLA_repo/hardware_framework/NVDLA/hw/nvdla
 #@ 
 #@ puts "${synMsgInfo} Analyze alibs"
 #@ alib_analyze_libs
-#@ 
-#@ # Write out a DDC at this point. 
-#@ write -f ddc -hier -o ${DB_DIR}/${MODULE}.elaborated.ddc
-#@ 
-#@ # Set wireload model
-#@ setVar WIRELOAD_MODEL_NAME ""
-#@ setVar WIRELOAD_MODEL_FILE ""
-#@ if {![shell_is_in_topographical_mode] && ![shell_is_in_exploration_mode]} {
-#@     if { $WIRELOAD_MODEL_FILE != "" } {
-#@         update_lib $library_name $WIRELOAD_MODEL_FILE -no_warnings
-#@         puts "${synMsgInfo} Reading in wireload model file $WIRELOAD_MODEL_FILE ..."
-#@     }
-#@     if { $WIRELOAD_MODEL_NAME != ""} {
-#@         set_wire_load_model  -name $WIRELOAD_MODEL_NAME
-#@         set_wire_load_mode   top
-#@         puts "${synMsgInfo} Setting wireload model to $WIRELOAD_MODEL_NAME"
-#@     }
-#@ }
-#@ 
-#@ 
-#@ # Set dont use on user cells
-#@ if {[info exists DONT_USE_LIST] && (${DONT_USE_LIST} != "")} {
-#@     set list_du [list]
-#@ 	foreach tempCelltLib ${DONT_USE_LIST} {
-#@         set detectLibCells [get_lib_cells -regexp -quiet ".*/${tempCelltLib}"]
-#@         if { [sizeof_collection $detectLibCells] > 0 } {
-#@ 			foreach_in_collection cell $detectLibCells {
-#@                 lappend list_du [get_object_name $cell]
-#@ 	            puts "${synMsgInfo} Putting dont_use attributes on [get_object_name $cell]"
-#@             }
-#@         }
-#@     }
-#@ 	set_dont_use $list_du
-#@ }
-#@ 
-#@ # Connect const port to inv to avoid having shorted ports
-#@ set_fix_multiple_port_nets -all -buffer_constants [get_designs *] 
-#@ 
-#@ 
-#@ # Read in a floorplan/macro placement TCL , and set up min/max routing layers if specified
-#@ if {[shell_is_in_topographical_mode]} {
-#@     if {[file exists "${DEF_DIR}/${MODULE}.def"]} {
-#@ 		puts "${synMsgInfo} Reading input floorplan file ${DEF_DIR}/${MODULE}.def"
-#@ 		extract_physical_constraints -verbose "${DEF_DIR}/${MODULE}.def"
-#@         report_physical_constraints
-#@ 	} else {
-#@ 		puts "${synMsgWarn} No DEF file found. Continuing without defnining a floorplan."
-#@ 	}
-#@     
-#@     # source the macro placement file if it exists
-#@ 	if {[info exists CONS_DIR] && [file exists "${CONS_DIR}/${MODULE}.macroplacement.tcl"]} {
-#@ 		source -echo -verbose ${CONS_DIR}/${MODULE}.macroplacement.tcl
-#@ 	} else {
-#@ 		puts "${synMsgWarn} No macro placement file found. Continuing without defnining a floorplan."
-#@ 	}
-#@ 	
-#@     if {[info exists MAX_ROUTING_LAYER] && ${MAX_ROUTING_LAYER} != "" && [info exists MIN_ROUTING_LAYER] && ${MIN_ROUTING_LAYER} != "" } {
-#@ 		puts "${synMsgInfo} Min/max routing layers specified - ${MIN_ROUTING_LAYER}/${MAX_ROUTING_LAYER}"
-#@ 		set_ignored_layers -min_routing_layer ${MIN_ROUTING_LAYER} -max_routing_layer ${MAX_ROUTING_LAYER}
-#@ 	}	
-#@ }
-#@ 
-#@ # Clock gating command
-#@ set power_cg_auto_identify  true
-#@ #if {[info exiists CLOCK_GATING_CELL] && ${CLOCK_GATING_CELL} != ""} {
-#@ #    set_clock_gating_style -sequential_cell latch -positive_edge_logic integrated:${CLOCK_GATING_CELL} -max_fanout 1000000000 -minimum_bitwidth 4 -control_point before -control_signal scan_enable
-#@ #}
-#@ 
-#@ 
-#@ # Latest constraints file SDC/cons
-#@ # source SDC file
-#@ if  {[info exists CONS_DIR] && [file exists "${CONS_DIR}/${MODULE}.sdc"]} {
-#@     puts "${synMsgInfo} Reading input SDC ${CONS_DIR}/${MODULE}.sdc using \"read_sdc\""
-#@ 	read_sdc "${CONS_DIR}/${MODULE}.sdc"
-#@ }
-#@ 
-#@ if  {[info exists CONS_DIR] && [file exists "${CONS_DIR}/${MODULE}.tcl"]} {
-#@     puts "${synMsgInfo} Reading additional (non-SDC) constraints from ${CONS_DIR}/${MODULE}.tcl using \"source\""
-#@ 	source -echo -verbose "${CONS_DIR}/${MODULE}.tcl"
-#@ } 
-#@ 
-#@ # Tighten synthesis constraints for enable signals to clock gates
-#@ setVar CGLUT_FILE ""
-#@ if {![shell_is_in_exploration_mode]} {
-#@     if { ${TIGHTEN_CGE} == 1 && [file exists $CGLUT_FILE]  } {
-#@         puts "${synMsgInfo} Start tighten_cg_enable_constraints"
-#@         # Reset all the clock gate latency apply in sdc
-#@         reset_clock_gate_latency
-#@     	source $CGLUT_FILE
-#@     	set i 1
-#@     	set size [llength [array names timingDeltaTableForCgEnable]]
-#@     	set end_1st [expr $size/2]
-#@     	set start_2nd [expr $end_1st + 1]
-#@     	foreach tableIndex [lsort -integer [array names timingDeltaTableForCgEnable]] {
-#@             if { $i=="1" } {
-#@     			set lat [expr 1.0 * $timingDeltaTableForCgEnable($tableIndex) / 1000.0]
-#@     			set start 1
-#@     		} elseif { $i < "$end_1st"} {
-#@     			set end [expr $tableIndex -1]
-#@     			set fanoutTable($i) "${start}-${end} -${lat}"
-#@     			set start $tableIndex
-#@     			set lat [expr 1.0 * $timingDeltaTableForCgEnable($tableIndex) / 1000.0]
-#@     		} elseif {$i == "$end_1st"} {
-#@     			set fanoutTable($i) "${start}-inf -${lat}"
-#@     			set start $tableIndex
-#@     			set lat [expr 1.0 * $timingDeltaTableForCgEnable($tableIndex) / 1000.0]
-#@     		} elseif {$i == "$size"} {
-#@     			set end [expr $tableIndex -1]
-#@     			set fanoutTable2nd($i) "${start}-${end} -${lat}"
-#@     			set start $tableIndex
-#@     			set lat [expr 1.0 * $timingDeltaTableForCgEnable($tableIndex) / 1000.0]
-#@     		} elseif {$i > "$end_1st"} {
-#@     			set end [expr $tableIndex -1]
-#@     			set fanoutTable2nd($i) "${start}-${end} -${lat}"
-#@     			set start $tableIndex
-#@     			set lat [expr 1.0 * $timingDeltaTableForCgEnable($tableIndex) / 1000.0]
-#@     		}
-#@     		incr i 
-#@         }
-#@     	set fanoutTable2nd($i) "${start}-inf -${lat}"
-#@     	puts "set_clock_gate_latency -stage 0 -fanout_latency {1-inf 0} -overwrite"
-#@     	set_clock_gate_latency -stage 0 -fanout_latency {1-inf 0} -overwrite
-#@     	set i 0
-#@     	foreach fanout_lat [lsort -integer [array names fanoutTable]] {
-#@     		if {$i == "0"} {
-#@     			set fanout_latency "$fanoutTable($fanout_lat)"
-#@     			incr i
-#@     		} else {
-#@     			set fanout_latency "$fanout_latency, $fanoutTable($fanout_lat)"
-#@     		}
-#@     	}
-#@     	set i 0
-#@     	foreach fanout_lat [lsort -integer [array names fanoutTable2nd]] {
-#@     		if {$i == "0"} {
-#@     			set fanout_latency2nd "$fanoutTable2nd($fanout_lat)"
-#@     			incr i
-#@     		} else {
-#@     			set fanout_latency2nd "$fanout_latency2nd, $fanoutTable2nd($fanout_lat)"
-#@     		}
-#@     	}
-#@     	
-#@     	puts "set_clock_gate_latency -stage 1 -fanout_latency {$fanout_latency} -overwrite"
-#@     	set_clock_gate_latency -stage 1 -fanout_latency "$fanout_latency" -overwrite
-#@     	puts "set_clock_gate_latency -stage 2 -fanout_latency {$fanout_latency2nd} -overwrite"
-#@     	set_clock_gate_latency -stage 2 -fanout_latency "$fanout_latency2nd" -overwrite
-#@     }
-#@ }
-#@ 
-#@ 
-#@ # Prevent ungrouping of specific hierarchies
-#@ if {[info exists DONT_UNGROUP_LIST] && ${DONT_UNGROUP_LIST} != ""} {
-#@     set retVal {}
-#@     foreach single_design $DONT_UNGROUP_LIST {
-#@         set gdCmd1 "get_designs \"$single_design\""
-#@         set gdList1 [eval $gdCmd1]
-#@         if { [sizeof_collection $gdList1] > 0 } {
-#@             set retVal [add_to_collection $retVal $gdList1]
-#@         }
-#@         set gdCmd2 "get_designs \"*\" -filter \"((defined(@original_design_name) && @original_design_name=~${single_design}) || (defined(@hdl_template) && @hdl_template=~${single_design})) \""
-#@         set gdList2 [eval $gdCmd2]
-#@         if { [sizeof_collection $gdList2] > 0 } {
-#@         	set retVal [add_to_collection $retVal $gdList2 -unique]
-#@         }
-#@     }
-#@     foreach_in_collection local_design $retVal {
-#@         puts "Setting ungroup and boundary_optimization to false for [get_object_name $local_design]"
-#@         set_ungroup 			   [get_object_name $local_design] false
-#@         set_boundary_optimization  [get_object_name $local_design] false
-#@     }
-#@     if { [sizeof_collection $retVal]} {
-#@         if {[shell_is_in_topographical_mode] && ![shell_is_in_exploration_mode]} {
-#@            puts " Also calling set_ahfs_options command to prevent certain forms of boundary optimization"
-#@            set_ahfs_options -preserve_boundary_phase true -no_port_punching $retVal
-#@        }
-#@     }
-#@ }
-#@ 
-#@ # Ungroup for area reduction
-#@ setVar AREA_RECOVERY 1
-#@ if {[info exists AREA_RECOVERY] && ${AREA_RECOVERY} == 1} {
-#@ 	set_cost_priority {max_design_rules}
-#@ 	set_max_area 0.0
-#@ }
-#@ 
-#@ # Optional: Retiming (using the set_optimize_registers command recommended by Synopsys)
-#@ setVar RETIME_LIST ""
-#@ setVar RETIME_TRANSFORM "multiclass"
-#@ setVar RETIME_JUSTIFICATION_EFFORT "high"
-#@ if {[info exists RETIME_LIST] && $RETIME_LIST != ""} {
-#@     foreach pattern $RETIME_LIST {
-#@         set retimeDesign [lindex [split $pattern ":"] 0]
-#@         set retimeClock [lindex [split $pattern ":"] 1]
-#@         set retimeColl {}
-#@         append_to_collection retimeColl [get_designs -q $retimeDesign]
-#@         # Also handle cases where the design names have been uniquified. 
-#@         append_to_collection retimeColl [get_designs -q -filter "((defined(@original_design_name) && @original_design_name=~${retimeDesign}) || (defined(@hdl_template) && @hdl_template=~${retimeDesign}))"]
-#@         set retimeColl [add_to_collection -unique $retimeColl {}]   
-#@         if {[sizeof_collection $retimeColl]} {
-#@             set retimeList [get_object_name $retimeColl]
-#@             puts "${synMsgInfo} Retiming enabled for design $retimeDesign"
-#@             set optregCmd "set_optimize_registers -design \"$retimeList\" -clock $retimeClock true -sync_transform $RETIME_TRANSFORM -async_transform $RETIME_TRANSFORM -print_critical_loop -check_design -verbose -justification_effort $RETIME_JUSTIFICATION_EFFORT"
-#@             puts "Running command: \n$optregCmd"
-#@             eval $optregCmd
-#@         }
-#@     }
-#@ }
-#@ 
-#@ write -f ddc -hier -o ${DB_DIR}/${MODULE}.precompile.ddc
-#@ 
-#@ 
-#@ # Compile commands
-#@ set compile_command ""
-#@ if {[shell_is_in_topographical_mode] && ${SYN_MODE} == "dcg" && ![shell_is_in_exploration_mode]} {
-#@ 	set compile_command "compile_ultra -no_seq_output_inversion  -gate_clock -spg -scan"
-#@ } elseif {[shell_is_in_topographical_mode] && ![shell_is_in_exploration_mode]} {
-#@ 	set compile_command "compile_ultra -no_seq_output_inversion  -gate_clock -scan"
-#@ } elseif {[shell_is_in_exploration_mode]} {
-#@     set compile_command "compile_exploration  -no_seq_output_inversion -gate_clock"
-#@ }  else {
-#@     set compile_command "compile_ultra -no_seq_output_inversion -no_autoungroup -scan"
-#@ }
-#@ 
-#@ puts "${synMsgInfo} Structuring from scratch with compile command: $compile_command"
-#@ eval $compile_command
