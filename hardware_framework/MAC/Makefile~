@@ -1,14 +1,14 @@
 DESIGNWARE_NOEXIST ?= 1
 
-TESTBENCH ?= fc
-#TESTBENCH ?= googlenet
+#TESTBENCH ?= fc
+TESTBENCH ?= googlenet
 #TESTBENCH ?= alexnet
 
-#BITS ?= 8
-BITS ?= 16
+BITS ?= 8
+#BITS ?= 16
 
-#UNIT ?= NVDLA_8_bits
-UNIT ?= NVDLA_16_bits
+UNIT ?= NVDLA_8_bits
+#UNIT ?= NVDLA_16_bits
 #UNIT ?= approx_8_bits
 #UNIT ?= approx_16_bits
 #UNIT ?= inference_8_bits
