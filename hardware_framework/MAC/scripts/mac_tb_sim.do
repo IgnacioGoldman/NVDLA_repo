@@ -1,7 +1,7 @@
-source ~/hardware_framework/logicSynthesis/core_settings.tcl
+source ~/NVDLA_repo/hardware_framework/MAC/logicSynthesis/core_settings.tcl
 
 set stage "postsyn"
-set netlist "~/hardware_framework/saved/mac_unit/mac_unit_postsyn.v"
+set netlist "~/NVDLA_repo/hardware_framework/MAC/saved/mac_unit/mac_unit_postsyn.v"
  
 onbreak resume
 onerror

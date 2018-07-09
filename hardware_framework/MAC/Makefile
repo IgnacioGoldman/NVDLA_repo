@@ -1,7 +1,7 @@
 DESIGNWARE_NOEXIST ?= 1
 
-TESTBENCH ?= fc
-#TESTBENCH ?= googlenet
+#TESTBENCH ?= fc
+TESTBENCH ?= googlenet
 #TESTBENCH ?= alexnet
 
 #BITS ?= 8
@@ -62,11 +62,10 @@ synthesis:
 
 switching_activity:
 	@#First modify manually files mac_unit.v and mul_unit.v according the architecture you want to synthesize
-	@cd ../hw/simulation1/hw && dc_shell-xg-t -f logicSynthesis/synthesis.tcl
+	@#dc_shell-xg-t -f logicSynthesis/synthesis.tcl
 	@#At this point the unit in synthesized
-	@[ -f transcript ] && rm transcript || echo "removed ok"
-	@[ -f vsim.wlf ] && rm vsim.wlf || echo "removed ok"
-	@[ -f work/ ] && rm -r work/ || echo "removed ok" 
+	@rm -rf transcript
+	@rm -rf work/
 	@vsim -c -do ./scripts/mac_tb_compile.do
 	@rm transcript
 	@vsim -c -do ./scripts/mac_tb_sim.do

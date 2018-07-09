@@ -47,7 +47,20 @@ set active_design $blockName
 define_design_lib WORK -path ./WORK
 
 # ANALYZE HDL SOURCES
-set my_sources [list ../cmac/mac_unit.v ../cmac/mul_unit.v ../cmac/mult16.v ../cmac/mult8x8.v ../cmac/mult4x4.v ../cmac/mult2x2.v ../cmac/mult8x8_inference.v]
+#For NVDLA_16_bits and NVDLA_8_bits
+set my_sources [list ~/NVDLA_repo/hardware_framework/MAC/cmac/$unit/mac_unit.v]
+
+#For approx_16_bits or approx_reduced_16_bits
+#set my_sources [list ~/NVDLA_repo/hardware_framework/MAC/cmac/$unit/mac_unit.v ~/NVDLA_repo/hardware_framework/MAC/cmac/$unit/mul_unit.v ~/NVDLA_repo/hardware_framework/MAC/cmac/$unit/mult8x8.v ~/NVDLA_repo/hardware_framework/MAC/cmac/$unit/mult4x4.v ~/NVDLA_repo/hardware_framework/MAC/cmac/$unit/mult2x2.v]
+
+#For approx_8_bits or approx_reduced_8_bits
+#set my_sources [list ~/NVDLA_repo/hardware_framework/MAC/cmac/$unit/mac_unit.v ~/NVDLA_repo/hardware_framework/MAC/cmac/$unit/mul_unit.v ~/NVDLA_repo/hardware_framework/MAC/cmac/$unit/mult4x4.v ~/NVDLA_repo/hardware_framework/MAC/cmac/$unit/mult2x2.v]
+
+#For inference_16_bits inference_8_bits inference_reduced_16_bits inference_reduced_8_bits
+#set my_sources [list ~/NVDLA_repo/hardware_framework/MAC/cmac/$unit/mac_unit.v ~/NVDLA_repo/hardware_framework/MAC/cmac/$unit/mul_unit.v ~/NVDLA_repo/hardware_framework/MAC/cmac/$unit/mult8x8_inference.v]
+
+
+
 read_file $my_sources -recursive -autoread -top $blockName -library $blockName
 
 ######################################################################
@@ -64,7 +77,7 @@ set_load 0.05 [all_outputs] ;# NOTE: to be checked
 ## SET DESIGN CONSTRAINTS
 ##
 ######################################################################
-source -echo "./${blockName}.sdc"
+source -echo "./sdc_files/${blockName}.sdc"
 set_dp_smartgen_options -all_options false -optimize_for area,speed -mult_arch benc_radix4 -booth_encoding true -booth_radix8 false -booth_mux_based false 
 
 ######################################################################
