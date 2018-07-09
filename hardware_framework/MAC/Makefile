@@ -18,6 +18,8 @@ UNIT ?= NVDLA_8_bits
 #UNIT ?= inference_reduced_8_bits
 #UNIT ?= inference_reduced_16_bits
 
+FLAG ?= 0
+
 
 help:
 	@printf "\nEnvironment to test MACs units\n"
@@ -31,6 +33,8 @@ help:
 clean:
 	@echo "Deleting *~ files..."
 	@find . -name "*~" -type f -delete
+	@rm -rf work/
+	@rm -rf transcript
 
 testbench:
 	@perl ./input_data/format_tb_MAC.pl ${TESTBENCH} ${BITS}
@@ -39,14 +43,19 @@ compile:
 	@vsim -c -do "vlog cmac/${UNIT}/*"
 
 simulate:
-	@[ -f work/ ] && rm -r work/ || echo "removed ok" 
-	@[ -f vsim.wlf ] && rm vsim.wlf || echo "removed ok"	
+	@rm -rf work/
+	@rm -rf vsim.wlf	
 	@perl ./input_data/format_tb_MAC.pl ${TESTBENCH} ${BITS}
+ifeq ($(BITS),8)
 	@vsim -c -do "vlog cmac/${UNIT}/*; vlog tb_top.v; vsim -novopt work.tb_top;run 8000ns;exit"
-	@perl ./error_check/error_check.pl ${BITS}
-
+else
+	@vsim -c -do "vlog cmac/${UNIT}/*; vlog tb_top16.v; vsim -novopt work.tb_top16;run 8000ns;exit"
+endif
+	@perl ./error_check/error_check.pl ${BITS} ${FLAG}
+	@perl ./error_check/compare.pl
 error:
-	@perl ./error_check/error_check.pl ${BITS}
+	@perl ./error_check/error_check.pl ${BITS} ${FLAG}
+	@perl ./error_check/compare.pl
 
 synthesis:
 	@dc_shell-xg-t -f logicSynthesis/synthesis.tcl

@@ -1,18 +1,18 @@
 `timescale 1ns/1ns
-/*TB 8 BITS*/
-module tb_top;
+/*TB 16 BITS*/
+module tb_top16;
  reg nvdla_core_clk;
 reg nvdla_wg_clk;
 reg nvdla_core_rstn;
 reg cfg_is_wg;
 reg cfg_reg_en;
-reg [8*8 -1:0] dat_actv_data;
+reg [8*16 -1:0] dat_actv_data;
 reg [8 -1:0] dat_actv_nz;
 reg [8 -1:0] dat_actv_pvld;
-reg [8*8 -1:0] wt_actv_data;
+reg [8*16 -1:0] wt_actv_data;
 reg [8 -1:0] wt_actv_nz;
 reg [8 -1:0] wt_actv_pvld;
-wire [19 -1:0] mac_out_data;
+wire [34:0] mac_out_data;
 wire mac_out_pvld;
 
 
@@ -40,8 +40,8 @@ end
 
 integer outfile0;
 integer outfile1;
-reg [63:0] A;
-reg [63:0] B;
+reg [128:0] A;
+reg [128:0] B;
 initial begin
     nvdla_core_clk = 1; 
     nvdla_core_rstn = 0;
@@ -72,5 +72,4 @@ end
  
   
 endmodule
-
 

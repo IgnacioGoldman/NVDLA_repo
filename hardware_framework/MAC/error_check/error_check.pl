@@ -2,11 +2,16 @@
 use strict;
 use File::Compare;
 my $bits     ="$ARGV[0]";
+my $flag     ="$ARGV[1]";
 my $input_file = "./transcript";
-my $output_file = "./error_check/relative_error.txt";
-
+my $output_file = "./error_check/MAC_result.txt";
+my $exact_file;
+if($flag == 1){
+	$exact_file = "./error_check/exact_result.txt";
+}
 my $inf;
 my $ouf;
+my $exac;
 my $check;
 my $input_lenght = 0;
 if($bits == 8){
@@ -19,7 +24,9 @@ if($bits == 16){
 print "accessing $input_file\n";
 open ($inf, "<", $input_file) || die "Cannot open $input_file";
 open ($ouf, ">", $output_file) || die "Cannot open $output_file";
-
+if($flag == 1){
+open ($exac, ">", $exact_file) || die "Cannot open $exact_file";
+}
 my $C = 0;
 my $B = 0;
 my $A = 0;
@@ -60,30 +67,26 @@ while(my $line = <$inf>){
 			if($bits == 8){			
 				$dat -= 256 if $dat >= 128;
 				$wt  -= 256 if $wt >= 128;
-				$res  -= 256 if $res >= 128;
 			}
 			else{
 				$dat -= 65536 if $dat >= 32768;
 				$wt  -= 65536 if $wt >= 32768;
-				$res  -= 2147483648 if $res >= 1073741824;
 			}
 			my $mul_res = $dat*$wt;
 			$accumulation = $accumulation + $mul_res;					
 		}
 	  	if($k>1){
-			#print $res . "--" . $accumulation . "\n";
-			my $exact = $accumulation;
-			my $approx = $res;
-			#calculate error
-			my $absolute = $exact - $approx;
-			my $relative = 0;		
-			if ($exact != 0){
-				$relative = ($absolute/$exact)*100;
+			if($bits == 8){			
+				$res  -= 65536 if $res >= 32768;
+				$res = $res*65536;
 			}
-			if($relative == 0){
-				print $ouf "relative error is: 0%\n";
-	  		}else{
-				print $ouf "relative error is: " . $relative . "%\n";
+			else{
+				$res  -= 4294967296 if $res >= 2147483648;
+			}
+			
+			print $ouf $res . "\n";
+			if($flag == 1){
+				print $exac $accumulation . "\n";
 			}
           }
 	}
